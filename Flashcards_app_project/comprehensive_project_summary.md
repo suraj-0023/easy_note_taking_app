@@ -2,7 +2,7 @@
 
 This document provides a unified overview of the development journey, features, and future roadmap of the Nexora application.
 
-**Last Updated**: 2026-05-17 (two-shot quiz distractor prefetch, smarter question-type-aware options)
+**Last Updated**: 2026-05-17 (Command-Center Notion-style UX redesign + 6 bug fixes)
 
 ---
 
@@ -12,10 +12,12 @@ Originally a vocabulary flashcards tool. As of April 2026, evolved into a full *
 
 ---
 
-## 2. Current Layout & UX (M3 Warm/Gamified Design)
+## 2. Current Layout & UX (Command-Center / Notion-Style Design)
 
 ### Design System
-**Onboarding Design** (as of May 6, 2026): The onboarding experience (wizard, spotlight, checklist) is now styled to match the app's emerald design system with consistent color tokens, surface styles, and flashcard gradients. The wizard includes a branded header with the Nexora N-mark logo and "Getting started" label for visual consistency.
+**Command-Center Redesign** (as of May 17, 2026): The app chrome has been redesigned in a Notion/Linear-inspired "Command-Center" aesthetic. Blue `#2D8CFF` replaces emerald as the primary accent for all structural/UI elements. Emerald is preserved only for content-level indicators (SM-2 mastery borders, vocab state pills). The design is flat, minimal, and productivity-focused.
+
+**Onboarding Design** (as of May 6, 2026): The onboarding experience (wizard, spotlight, checklist) is styled to match the app's design system with consistent color tokens, surface styles, and flashcard gradients. The wizard includes a branded header with the Nexora N-mark logo and "Getting started" label for visual consistency.
 
 **Mobile Responsiveness** (May 7, 2026): Fully responsive layout for phones/tablets at ≤768px viewport width. Desktop layout (1024px+) is completely unchanged.
 - **Sidebar → Slide-in Drawer**: On mobile, sidebar transforms into an overlay drawer (`transform: translateX(-100%)` hidden, `translate: 0` when open). Toggled by hamburger button (☰) in top bar.
@@ -26,14 +28,16 @@ Originally a vocabulary flashcards tool. As of April 2026, evolved into a full *
 - **Viewport Safe Area Support**: Added `viewport-fit=cover` to meta tag for iPhone notch/safe-area support.
 - **Existing Onboarding Responsiveness**: ProfileSetup, WelcomeTour, and OnboardComplete screens were already responsive via existing 600px media queries.
 
-### Sidebar (M3 White + Green-Tinted Gradient, 260px width on desktop; slide-in drawer on mobile)
-- **Logo**: "N" mark in emerald (#10B981) (Nexora)
-- **New Deck** button → pill-shaped, emerald, creates a named deck
-- **Deck list** → emerald pill active state, white/muted default; clean list with no overlapping indicators
+### Sidebar (Command-Center, 260px width on desktop; slide-in drawer on mobile)
+- **Logo**: "N" mark in blue (#2D8CFF) with white letter (Nexora)
+- **Search bar**: Ghost pill button `⌘K` shortcut chip below logo — opens command palette
+- **New Deck** button → pill-shaped, blue (#2D8CFF), creates a named deck
+- **Deck list** → blue pill active state, neutral muted default; flat tree-nav style
 - **Daily Queue Badge** → shows total items due today; expandable breakdown (new/review/lapsed); dismissible with ✕ button
 - **Practice section** → SVG icons (flashcard, vocab, chart); links to Flashcards, Vocab, Stats (open as full-area overlay)
 - **Profile** → auth state, sign in/out, sync badge
-- **Background**: White with subtle #F0FDF4 green-tinted gradient; 14px border-radius on deck pills
+- **Background**: White (#FFFFFF) with subtle #F8FAFC neutral gradient; no green tint
+- **Board Stats Bar** (`#ccBoardStats`): 4-card grid above library showing Total Items, Mastered, Due Today, Decks — auto-hides when library is empty
 
 ### Main Area — Single Scrollable Page
 1. **Deck Header** (sticky) — dot + deck name + total item count; updates on deck switch; includes ⌘K Search ghost pill and context-aware "+ Add" button (Cmd+N shortcut; hidden on deck views, shown on Complete Library). Tagline on deck home: "Notes · Flashcards · Vocabulary" (left-aligned)

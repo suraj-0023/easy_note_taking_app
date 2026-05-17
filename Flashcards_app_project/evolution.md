@@ -4,6 +4,29 @@
 
 ---
 
+## 2026-05-17 — Command-Center (Notion-style) UX redesign + 6 bug fixes
+
+**What:** Full visual redesign of the app shell from M3 warm/emerald to a Notion/Linear-inspired "Command-Center" aesthetic. Blue `#2D8CFF` replaces emerald as the primary UI accent for all chrome elements (sidebar, buttons, active states, add modal, search shortcut pill). Library section tiles become minimal board cards. A board stats bar (`#ccBoardStats`) appears above the library showing Total Items, Mastered, Due Today, and Decks counts. Sidebar gains an inline search button styled as a ghost pill. Six confirmed bugs were found and fixed by parallel Haiku bug-hunter agents.
+
+**Why:** User wanted a more professional, productivity-focused design closer to Notion/Linear rather than the gamified emerald palette. The existing M3 warm aesthetic felt too playful for a study tool that serious learners use daily.
+
+**Impact:** App now has a clean, neutral command-center look. Sidebar navigation is flat-tree style. Library tiles are minimal board cards with bold counts. Emerald is preserved for content-level indicators (SM-2 mastery borders, vocab pills) but removed from all structural/chrome elements. Board stats give users an at-a-glance progress summary without entering a deck.
+
+**Technical Detail:**
+1. **CSS variables**: Added `--primary: #2D8CFF`, `--primary-50: #EFF6FF`, `--primary-100: #DBEAFE`, `--primary-700: #1D4ED8` to `:root` block (~line 134).
+2. **Command-Center override block**: ~380-line CSS block injected before `</style>` (end of StylesGlobal) using `!important` throughout to override existing cascade without touching individual rules. Covers sidebar background, logo mark, deck pill active states, search ghost pill, add button, tile cards, board stats grid, and all dark-mode counterparts.
+3. **Sidebar search bar**: HTML `<button class="sidebar-search-bar">` added between logo and Library label in `MainAppContainer` (6227); calls `openSearch()` and displays `⌘K` shortcut chip.
+4. **Board stats bar**: `<div class="cc-board-stats" id="ccBoardStats">` added before library section; populated in `renderLibrary()` (JSLibrary 10988) with Total Items, Mastered (SM-2 repetitions ≥ 3), Due Today, and Decks counts.
+5. **Bug fixes**:
+   - `getDueCount()` property mismatch (`newCount/reviewCount/lapsedCount` → `new/review/lapsed`) — caused "NaN" in Due Today stat.
+   - Board stats 4-column overflow on mobile <560px — fixed with `@media (max-width:640px) { .cc-board-stat { flex: 1 1 calc(50% - 5px); } }`.
+   - Library tile counts showed "3 notes" text — JS now sets only the raw number; `.lib-tile-name` label handles the type string.
+   - Add Modal deck selector `<select>` still used emerald token — overridden to blue `var(--primary-700)` / `var(--primary-50)`.
+   - Dark-mode `.cc-board-stat*` overrides missing `!important` and `.red` variant — added all flags and red dark variant `#FF6B6B`.
+   - "Add Content" button in Recently Added section had inline `background:var(--emerald)` — overridden via `#recentlyAddedSection button { background: #2D8CFF !important; }`.
+
+---
+
 ## 2026-05-17 — Two-shot quiz distractor prefetch, smarter question-type-aware options
 
 **What:** Fixed quiz distractor generation architecture with two-shot concurrent batching and smarter fallback options.
