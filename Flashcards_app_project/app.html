@@ -6101,6 +6101,40 @@
     /* ═══════════════════════════════════════════════════════════════
        END COMMAND-CENTER REDESIGN
     ════════════════════════════════════════════════════════════════ */
+
+    /* ── Voice Input ── */
+    .vi-wrap { position: relative; display: block; }
+    .vi-wrap input,
+    .vi-wrap textarea { padding-right: 42px !important; width: 100%; box-sizing: border-box; }
+    .vi-btn {
+      position: absolute;
+      right: 8px; top: 50%;
+      transform: translateY(-50%);
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-2, #e5e5e3);
+      background: var(--surface, #fff);
+      color: var(--muted, #999);
+      cursor: pointer;
+      display: grid; place-items: center;
+      transition: border-color 0.15s, color 0.15s, box-shadow 0.15s, background 0.15s;
+      z-index: 2; padding: 0; flex-shrink: 0;
+    }
+    .vi-btn:hover { border-color: #2D8CFF; color: #2D8CFF; }
+    .vi-btn.listening {
+      background: #FF4444; border-color: #FF4444; color: #fff;
+      animation: vi-pulse 1.2s ease infinite;
+    }
+    .vi-textarea .vi-btn { top: 9px; transform: none; }
+    @keyframes vi-pulse {
+      0%,100% { box-shadow: 0 0 0 3px rgba(255,68,68,0.2); }
+      50%      { box-shadow: 0 0 0 7px rgba(255,68,68,0.07); }
+    }
+    .vi-hint { font-size: 11px; color: var(--muted); margin-top: 4px; min-height: 15px; }
+    /* Search modal: mic sits inline in the flex row */
+    .vi-inline { position: static; transform: none; flex-shrink: 0; }
+    [data-theme="dark"] .vi-btn { background: var(--surface-2, #1C1A17); border-color: var(--border-2, #2A2826); }
+    [data-theme="dark"] .vi-btn:hover { border-color: #5BA4FF; color: #5BA4FF; }
   </style>
 </head>
 
@@ -7297,12 +7331,18 @@
           </div>
           <div>
             <label>Front (Question / Prompt)</label>
-            <textarea id="customFrontInput" class="custom-card-input"
-              placeholder="e.g., What is the capital of France?"></textarea>
+            <div class="vi-wrap vi-textarea">
+              <textarea id="customFrontInput" class="custom-card-input"
+                placeholder="e.g., What is the capital of France?"></textarea>
+              <button type="button" class="vi-btn" data-vi="customFrontInput" onclick="startVoice('customFrontInput')" title="Voice input" aria-label="Voice input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button>
+            </div>
           </div>
           <div>
             <label>Back (Answer / Details)</label>
-            <textarea id="customBackInput" class="custom-card-input" placeholder="e.g., Paris"></textarea>
+            <div class="vi-wrap vi-textarea">
+              <textarea id="customBackInput" class="custom-card-input" placeholder="e.g., Paris"></textarea>
+              <button type="button" class="vi-btn" data-vi="customBackInput" onclick="startVoice('customBackInput')" title="Voice input" aria-label="Voice input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button>
+            </div>
           </div>
           <button class="custom-card-btn" onclick="saveCustomCard()">Save Card</button>
         </div>
@@ -12676,6 +12716,95 @@ No markdown, no extra text.`;
       }
 
       // ──────────────────────────────────────────────────────────────
+      // @@SECTION: JSVoiceInput
+      // ──────────────────────────────────────────────────────────────
+      // ── VOICE INPUT MODULE ──
+      // Web Speech API wrapper — live interim transcription, auto-restart on pause.
+      // Gracefully no-ops on unsupported browsers (Firefox).
+      const _VI = (() => {
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SR) return { start: () => {}, stop: () => {} };
+
+        let _rec = null, _activeId = null, _listening = false, _finalText = '';
+
+        const _el   = id => document.getElementById(id);
+        const _btn  = id => document.querySelector(`.vi-btn[data-vi="${id}"]`);
+        const _hint = id => document.getElementById('vi-hint-' + id);
+
+        function start(inputId) {
+          // Toggle off if already listening on same field
+          if (_listening && _activeId === inputId) { stop(); return; }
+          if (_listening) stop();
+
+          const inp = _el(inputId);
+          if (!inp) return;
+
+          _activeId  = inputId;
+          _finalText = inp.value || '';
+          _listening = true;
+
+          const b = _btn(inputId);
+          if (b) b.classList.add('listening');
+          const h = _hint(inputId);
+          if (h) h.textContent = '🎤 Listening… speak now';
+
+          _rec = new SR();
+          _rec.continuous     = true;
+          _rec.interimResults = true;
+          _rec.lang           = navigator.language || 'en-US';
+
+          _rec.onresult = e => {
+            let interim = '';
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+              const t = e.results[i][0].transcript;
+              if (e.results[i].isFinal) {
+                _finalText += (_finalText && !/\s$/.test(_finalText) ? ' ' : '') + t;
+              } else {
+                interim = t;
+              }
+            }
+            const el = _el(_activeId);
+            if (!el) return;
+            el.value = _finalText + (interim ? ' ' + interim : '');
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+          };
+
+          _rec.onerror = e => {
+            const h = _hint(_activeId);
+            if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+              if (h) h.textContent = '⚠️ Microphone permission denied — check browser settings';
+            } else if (e.error !== 'aborted') {
+              if (h) h.textContent = '⚠️ Voice error: ' + e.error;
+            }
+            stop();
+          };
+
+          // Auto-restart on natural pause so user can keep talking
+          _rec.onend = () => { if (_listening) { try { _rec.start(); } catch(_) {} } };
+
+          try { _rec.start(); }
+          catch(e) { stop(); }
+        }
+
+        function stop() {
+          _listening = false;
+          if (_rec) { try { _rec.stop(); } catch(_) {} _rec = null; }
+          const b = _btn(_activeId);
+          if (b) b.classList.remove('listening');
+          const h = _hint(_activeId);
+          if (h) h.textContent = '';
+          _activeId = null;
+        }
+
+        // Stop on Escape (modal close handles the rest)
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && _listening) stop(); });
+
+        return { start, stop };
+      })();
+
+      function startVoice(id) { _VI.start(id); }
+      function stopVoice()     { _VI.stop();   }
+
       // @@SECTION: JSMobileMenu
       // ──────────────────────────────────────────────────────────────
       function toggleMobileMenu() {
@@ -12838,6 +12967,7 @@ No markdown, no extra text.`;
       <div class="search-input-row">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
         <input id="searchInput" class="search-input" type="text" placeholder="Search vocab, notes, flashcards…" autocomplete="off" oninput="runSearch(this.value)" onkeydown="handleSearchKey(event)">
+        <button type="button" class="vi-btn vi-inline" data-vi="searchInput" onclick="startVoice('searchInput')" title="Voice search" aria-label="Voice search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button>
         <kbd style="font-size:11px;color:var(--muted);background:var(--bg-2);border:1px solid var(--border);border-radius:4px;padding:2px 6px;cursor:pointer;" onclick="closeSearch()">Esc</kbd>
       </div>
       <div id="searchResults" class="search-results"></div>
@@ -12874,15 +13004,22 @@ No markdown, no extra text.`;
       </div>
 
       <!-- Vocab word input — shown only for vocab-only mode -->
-      <input id="addModalWord" class="add-modal-word-input" type="text"
-        placeholder="Type a word or phrase…"
-        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();handleAddModalGenerate();}">
+      <div class="vi-wrap">
+        <input id="addModalWord" class="add-modal-word-input" type="text"
+          placeholder="Type a word or phrase…"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();handleAddModalGenerate();}">
+        <button type="button" class="vi-btn" data-vi="addModalWord" onclick="startVoice('addModalWord')" title="Voice input" aria-label="Voice input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button>
+      </div>
 
       <!-- Text input area — always visible -->
       <div id="addModalTextArea" class="add-modal-field">
         <label>Paste or type your content</label>
-        <textarea id="addMultiText" rows="5"
-          placeholder="Paste any text — notes, passages, study material…"></textarea>
+        <div class="vi-wrap vi-textarea">
+          <textarea id="addMultiText" rows="5"
+            placeholder="Paste any text — notes, passages, study material…"></textarea>
+          <button type="button" class="vi-btn" data-vi="addMultiText" onclick="startVoice('addMultiText')" title="Voice input" aria-label="Voice input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button>
+        </div>
+        <div class="vi-hint" id="vi-hint-addMultiText"></div>
       </div>
 
       <!-- Vocab context (shown only for vocab-only) -->
