@@ -5895,7 +5895,20 @@
       color: #1D4ED8 !important;
       border-radius: 8px !important;
     }
-    .daily-queue-badge button { background: #2D8CFF !important; }
+    /* Only the "Start Review" button (last) gets blue; the ✕ dismiss stays minimal */
+    .daily-queue-badge button:last-child {
+      background: #2D8CFF !important;
+      width: 100% !important;
+    }
+    .daily-queue-badge button:first-child {
+      background: none !important;
+      width: auto !important;
+      padding: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: var(--muted) !important;
+      font-size: 16px !important;
+    }
 
     /* ── Progress bar fill — blue ── */
     .progress-fill { background: #2D8CFF !important; }
@@ -6311,12 +6324,6 @@
         <div id="dailyQueueBreakdown" style="font-size:11px;margin:3px 0 6px;color:var(--muted);"></div>
         <button onclick="startSM2Review()" style="width:100%;padding:6px 0;font-size:12px;font-weight:700;background:var(--emerald);color:#fff;border:none;border-radius:8px;cursor:pointer;">Start Review →</button>
       </div>
-
-      <button class="sidebar-search-bar" onclick="openSearch()" aria-label="Search">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        Search…
-        <span class="sidebar-search-shortcut">⌘K</span>
-      </button>
 
       <div class="sidebar-section-label">Library</div>
       <div class="sidebar-nav" id="sidebarProjectList">
@@ -8459,7 +8466,9 @@
       function getDueCount() {
         const today = new Date().toISOString().split('T')[0];
         let newCount = 0, review = 0, lapsed = 0;
-        [...ALL_VOCAB, ...ALL_CUSTOM_CARDS].forEach(item => {
+        // Only count user-created vocab (id starts with 'c_') — not core vocabulary.json words
+        const userVocab = ALL_VOCAB.filter(w => w.id && w.id.startsWith('c_'));
+        [...userVocab, ...ALL_CUSTOM_CARDS].forEach(item => {
           const s = item.sm2 || defaultSM2();
           const due = !s.dueDate || s.dueDate <= today;
           if (s.state === 'new') newCount++;

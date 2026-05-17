@@ -865,7 +865,7 @@
 #nob-checklist-root {
   position: fixed;
   bottom: 20px;
-  left: 16px;
+  right: 20px;
   z-index: 1000;
   font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
 }
