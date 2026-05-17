@@ -130,6 +130,12 @@
       --sidebar-hover:#ECFDF5;
       --accent:       #10B981;
 
+      /* Command-Center primary (blue) */
+      --primary:      #2D8CFF;
+      --primary-50:   #EBF4FF;
+      --primary-100:  #BFDBFE;
+      --primary-700:  #1A73E8;
+
       /* Onboarding tokens (unchanged) */
       --tour-c-decks: #6366F1;
       --tour-c-cards: #F59E0B;
@@ -5623,6 +5629,512 @@
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
+
+    /* ═══════════════════════════════════════════════════════════════
+       COMMAND-CENTER REDESIGN (Notion-style)
+       All rules here intentionally override earlier declarations.
+       Functional JS hooks (IDs, data-* attrs) are untouched.
+    ════════════════════════════════════════════════════════════════ */
+
+    /* ── Sidebar shell ── */
+    aside {
+      background: #FBFAF8 !important;
+      border-right: 1px solid #E9E9E7 !important;
+      padding: 16px 10px !important;
+    }
+
+    /* ── Logo ── */
+    .sidebar-logo { padding: 6px 8px 14px !important; }
+
+    .sidebar-logo-mark {
+      background: linear-gradient(135deg, #2D8CFF, #0066FF) !important;
+      box-shadow: 0 4px 10px -2px rgba(45,140,255,0.35) !important;
+    }
+
+    .sidebar-logo-name {
+      background: none !important;
+      -webkit-background-clip: unset !important;
+      background-clip: unset !important;
+      -webkit-text-fill-color: #37352F !important;
+      color: #37352F !important;
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.01em !important;
+    }
+
+    /* ── Sidebar search bar (new element) ── */
+    .sidebar-search-bar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: #F1F1EF;
+      border-radius: 7px;
+      padding: 7px 10px;
+      font-size: 12.5px;
+      color: #9B9A97;
+      cursor: pointer;
+      margin-bottom: 8px;
+      font-family: var(--font-sans);
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: background 0.14s;
+    }
+    .sidebar-search-bar:hover { background: #E9E9E7; color: #37352F; }
+    .sidebar-search-bar svg { flex-shrink: 0; opacity: 0.55; }
+    .sidebar-search-shortcut {
+      margin-left: auto;
+      background: #E5E5E3;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #9B9A97;
+    }
+
+    /* ── Section labels ── */
+    .sidebar-section-label {
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      color: #9B9A97 !important;
+      padding: 10px 8px 4px !important;
+      letter-spacing: 0.06em !important;
+    }
+
+    /* ── Sidebar nav items — flat tree style ── */
+    .project-item-sidebar {
+      border-radius: 6px !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      padding: 7px 10px !important;
+      color: #37352F !important;
+    }
+    .project-item-sidebar:hover { background: #F1F1EF !important; }
+    .project-item-sidebar.active {
+      background: #E8F0FE !important;
+      color: #1A73E8 !important;
+      box-shadow: none !important;
+    }
+
+    /* ── New Deck button — bordered flat ── */
+    .new-project-btn {
+      background: none !important;
+      color: #37352F !important;
+      border: 1.5px solid #E0DEDA !important;
+      box-shadow: none !important;
+      border-radius: 7px !important;
+      font-weight: 600 !important;
+      font-size: 13px !important;
+      padding: 7px 12px !important;
+    }
+    .new-project-btn:hover {
+      background: #F1F1EF !important;
+      border-color: #C7C5C3 !important;
+      transform: none !important;
+    }
+
+    /* ── Practice links ── */
+    .practice-link {
+      border-radius: 6px !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      padding: 7px 10px !important;
+      color: #37352F !important;
+    }
+    .practice-link:hover { background: #F1F1EF !important; }
+    .practice-link.active {
+      background: #E8F0FE !important;
+      color: #1A73E8 !important;
+      box-shadow: none !important;
+    }
+
+    /* ── Theme / Help sidebar items ── */
+    .theme-toggle-btn {
+      border-radius: 6px !important;
+      font-size: 13px !important;
+      padding: 7px 10px !important;
+      margin: 2px 0 !important;
+    }
+    .theme-toggle-btn:hover { background: #F1F1EF !important; }
+
+    #helpSidebarItem {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px !important;
+      font-size: 13px !important;
+      color: #6B6868 !important;
+      border-radius: 6px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-family: var(--font-sans);
+      font-weight: 500;
+      transition: background 0.14s;
+    }
+    #helpSidebarItem:hover { background: #F1F1EF !important; }
+
+    /* ── Deck header bar — Notion breadcrumb style ── */
+    .deck-header-bar {
+      background: #FBFAF8 !important;
+      border-bottom: 1px solid #E9E9E7 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      padding: 11px 28px !important;
+    }
+
+    .deck-header-name {
+      font-size: 15px !important;
+      font-weight: 600 !important;
+      color: #37352F !important;
+    }
+
+    .deck-header-count {
+      background: #F1F1EF !important;
+      border: none !important;
+      color: #6B6868 !important;
+      font-weight: 600 !important;
+      border-radius: 5px !important;
+      padding: 2px 8px !important;
+    }
+
+    /* ── Search ghost button ── */
+    .search-ghost-btn {
+      background: #F7F6F3 !important;
+      border: 1px solid #E9E9E7 !important;
+      border-radius: 7px !important;
+      font-size: 12px !important;
+      padding: 6px 12px !important;
+    }
+    .search-ghost-btn:hover { background: #EEECEA !important; border-color: #DDDBD8 !important; }
+
+    /* ── Add button — blue ── */
+    .add-modal-btn {
+      background: #2D8CFF !important;
+      border-radius: 7px !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      padding: 7px 14px !important;
+    }
+    .add-modal-btn:hover { background: #1a7ae0 !important; opacity: 1 !important; }
+
+    /* ── Main area background ── */
+    .main-scroll-area { background: var(--bg); }
+
+    /* ── Library section padding ── */
+    .library-section { padding: 24px 28px !important; }
+
+    /* ── Library title — section label style ── */
+    .library-title {
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      color: #9B9A97 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.08em !important;
+    }
+
+    /* ── Library summary tiles — board card style ── */
+    .library-summary-tiles {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 12px !important;
+    }
+
+    .lib-summary-tile {
+      background: #fff !important;
+      border: 1.5px solid #E9E9E7 !important;
+      border-radius: 10px !important;
+      padding: 16px 18px !important;
+      align-items: flex-start !important;
+      text-align: left !important;
+      box-shadow: none !important;
+    }
+    .lib-summary-tile:hover {
+      border-color: #2D8CFF !important;
+      box-shadow: 0 0 0 3px rgba(45,140,255,0.08) !important;
+      transform: none !important;
+    }
+    .lib-summary-tile.active {
+      border-color: #2D8CFF !important;
+      box-shadow: 0 0 0 3px rgba(45,140,255,0.12) !important;
+      transform: none !important;
+    }
+
+    .lib-tile-name {
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      color: #9B9A97 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.06em !important;
+    }
+
+    .lib-tile-count {
+      font-size: 1.6rem !important;
+      font-weight: 800 !important;
+      color: #37352F !important;
+      text-transform: none !important;
+      letter-spacing: -0.03em !important;
+    }
+
+    /* ── Library list cards — subtle flat ── */
+    .lib-list-card {
+      border-radius: 8px !important;
+      border: 1px solid #E9E9E7 !important;
+      box-shadow: none !important;
+    }
+    .lib-list-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06) !important;
+      transform: translateY(-1px) !important;
+    }
+
+    /* ── Daily queue badge — blue ── */
+    .daily-queue-badge {
+      background: #EBF4FF !important;
+      border-color: #BFDBFE !important;
+      color: #1D4ED8 !important;
+      border-radius: 8px !important;
+    }
+    /* Only the "Start Review" button (last) gets blue; the ✕ dismiss stays minimal */
+    .daily-queue-badge button:last-child {
+      background: #2D8CFF !important;
+      width: 100% !important;
+    }
+    .daily-queue-badge button:first-child {
+      background: none !important;
+      width: auto !important;
+      padding: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: var(--muted) !important;
+      font-size: 16px !important;
+    }
+
+    /* ── Progress bar fill — blue ── */
+    .progress-fill { background: #2D8CFF !important; }
+
+    /* ── Mode buttons — blue active ── */
+    .mode-btn:hover { border-color: #2D8CFF !important; color: #1a7ae0 !important; }
+    .mode-btn.active {
+      background: #2D8CFF !important;
+      border-color: #2D8CFF !important;
+      box-shadow: 0 4px 10px -2px rgba(45,140,255,0.4), inset 0 -2px 0 rgba(0,0,0,0.08) !important;
+    }
+
+    /* ── Util buttons hover ── */
+    .util-btn:hover { border-color: #2D8CFF !important; color: #1a7ae0 !important; }
+
+    /* ── Help tab active ── */
+    .help-tab.active { color: #2D8CFF !important; border-bottom-color: #2D8CFF !important; }
+    .help-step-num { background: #2D8CFF !important; }
+
+    /* ── Board stats bar (new element) ── */
+    .cc-board-stats {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .cc-board-stat {
+      background: #fff;
+      border: 1.5px solid #E9E9E7;
+      border-radius: 10px;
+      padding: 14px 18px;
+      flex: 1;
+      min-width: 110px;
+    }
+    .cc-board-stat-n {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #37352F;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .cc-board-stat-l {
+      font-size: 11px;
+      font-weight: 600;
+      color: #9B9A97;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .cc-board-stat-n.blue  { color: #2D8CFF; }
+    .cc-board-stat-n.red   { color: #EF4444; }
+    .cc-board-stat-n.green { color: #10B981; }
+
+    /* ── Dark-mode Command-Center overrides ── */
+    [data-theme="dark"] aside {
+      background: #1A1918 !important;
+      border-right-color: #2A2826 !important;
+    }
+    [data-theme="dark"] .sidebar-logo-name {
+      -webkit-text-fill-color: #E9E7E4 !important;
+      color: #E9E7E4 !important;
+    }
+    [data-theme="dark"] .sidebar-search-bar {
+      background: #252321 !important;
+      color: #7A7876 !important;
+    }
+    [data-theme="dark"] .sidebar-search-bar:hover { background: #2D2B29 !important; }
+    [data-theme="dark"] .sidebar-search-shortcut { background: #2D2B29 !important; color: #7A7876 !important; }
+    [data-theme="dark"] .project-item-sidebar { color: #D5D2CE !important; }
+    [data-theme="dark"] .project-item-sidebar:hover { background: #252321 !important; }
+    [data-theme="dark"] .project-item-sidebar.active { background: rgba(45,140,255,0.15) !important; color: #5BA4FF !important; }
+    [data-theme="dark"] .new-project-btn { color: #D5D2CE !important; border-color: #2A2826 !important; background: none !important; }
+    [data-theme="dark"] .new-project-btn:hover { background: #252321 !important; }
+    [data-theme="dark"] .practice-link { color: #D5D2CE !important; }
+    [data-theme="dark"] .practice-link:hover { background: #252321 !important; }
+    [data-theme="dark"] .practice-link.active { background: rgba(45,140,255,0.15) !important; color: #5BA4FF !important; }
+    [data-theme="dark"] .deck-header-bar { background: #1A1918 !important; border-bottom-color: #2A2826 !important; }
+    [data-theme="dark"] .deck-header-name { color: #E9E7E4 !important; }
+    [data-theme="dark"] .deck-header-count { background: #252321 !important; color: #9B9A97 !important; }
+    [data-theme="dark"] .search-ghost-btn { background: #252321 !important; border-color: #2A2826 !important; }
+    [data-theme="dark"] .lib-summary-tile { background: #1C1A17 !important; border-color: #2A2826 !important; }
+    [data-theme="dark"] .lib-summary-tile:hover { border-color: #5BA4FF !important; }
+    [data-theme="dark"] .lib-tile-name { color: #5A5856 !important; }
+    [data-theme="dark"] .lib-tile-count { color: #E9E7E4 !important; }
+    [data-theme="dark"] .library-title { color: #5A5856 !important; }
+    [data-theme="dark"] .lib-list-card { border-color: #2A2826 !important; }
+    [data-theme="dark"] .daily-queue-badge { background: rgba(45,140,255,0.12) !important; border-color: rgba(45,140,255,0.25) !important; color: #5BA4FF !important; }
+    [data-theme="dark"] .add-modal-btn { background: #2D8CFF !important; }
+    [data-theme="dark"] #helpSidebarItem { color: #7A7876 !important; }
+    [data-theme="dark"] #helpSidebarItem:hover { background: #252321 !important; }
+    [data-theme="dark"] .bottom-nav-item.active { color: #5BA4FF !important; }
+    [data-theme="dark"] .cc-board-stat { background: #1C1A17 !important; border-color: #2A2826 !important; }
+    [data-theme="dark"] .cc-board-stat-n { color: #E9E7E4 !important; }
+    [data-theme="dark"] .cc-board-stat-n.blue { color: #5BA4FF !important; }
+    [data-theme="dark"] .cc-board-stat-n.green { color: #34D399 !important; }
+    [data-theme="dark"] .cc-board-stat-n.red { color: #FF6B6B !important; }
+    [data-theme="dark"] .cc-board-stat-l { color: #5A5856 !important; }
+    [data-theme="dark"] .theme-toggle-btn:hover { background: #252321 !important; }
+
+    /* ── Board stats responsive (2-col on narrow screens) ── */
+    @media (max-width: 640px) {
+      .cc-board-stats { flex-wrap: wrap; }
+      .cc-board-stat { flex: 1 1 calc(50% - 5px); min-width: 0; }
+    }
+
+    /* ── Add-modal title select — blue to match redesign ── */
+    .add-modal-title select {
+      color: var(--primary-700, #1A73E8) !important;
+      background: var(--primary-50, #EBF4FF) !important;
+      border-color: var(--primary-100, #BFDBFE) !important;
+    }
+
+    /* ── Recently Added "Add Content" CTA — blue ── */
+    #recentlyAddedSection button {
+      background: #2D8CFF !important;
+    }
+    #recentlyAddedSection button:hover {
+      background: #1a7ae0 !important;
+    }
+
+    /* ── Deck Home CTA button — blue ── */
+    .deck-home-cta-btn {
+      background: #2D8CFF !important;
+      border-radius: 10px !important;
+    }
+    .deck-home-cta-btn:hover {
+      background: #1a7ae0 !important;
+      opacity: 1 !important;
+    }
+
+    /* ── Library summary tiles — blue active state ── */
+    .lib-summary-tile.active {
+      border-color: #2D8CFF !important;
+      box-shadow: 0 0 0 2px rgba(45, 140, 255, 0.18), 0 8px 20px rgba(17, 24, 39, 0.08) !important;
+    }
+    .lib-summary-tile:hover {
+      border-color: rgba(45, 140, 255, 0.4) !important;
+    }
+
+    /* ── Deck header "+ Add" button — blue ── */
+    .deck-add-btn, .add-btn, #mainAddBtn, button[onclick*="openAddModal"] {
+      background: #2D8CFF !important;
+      border-color: #2D8CFF !important;
+    }
+
+    /* ── Main content tab/pill active states — blue ── */
+    .view-tab.active, .mode-tab.active, .tab-btn.active,
+    .type-pill.active, .filter-pill.active, .pill.active {
+      background: #2D8CFF !important;
+      border-color: #2D8CFF !important;
+      color: #fff !important;
+    }
+
+    /* ── Add section type buttons (Text / Image pills) — blue when active ── */
+    .add-type-btn.active, .source-btn.active, .gen-pill.active, .from-pill.active {
+      background: #2D8CFF !important;
+      border-color: #2D8CFF !important;
+      color: #fff !important;
+    }
+
+    /* ── Progress bar / score ring / mastery accent ── */
+    .progress-fill, .score-ring circle.filled, .score-fill {
+      background: #2D8CFF !important;
+      stroke: #2D8CFF !important;
+    }
+
+    /* ── "New Deck" button in main content ── */
+    .new-deck-btn, .new-project-btn, button[onclick*="createDeck"], button[onclick*="newDeck"] {
+      background: #2D8CFF !important;
+      border-color: #2D8CFF !important;
+    }
+
+    /* ── Inline small "Add" / "Save" action buttons (not vocab state) ── */
+    .action-btn-primary, .save-btn, .confirm-btn, .submit-btn {
+      background: #2D8CFF !important;
+    }
+
+    /* ── Dark-mode equivalents ── */
+    [data-theme="dark"] .deck-home-cta-btn {
+      background: #2D8CFF !important;
+    }
+    [data-theme="dark"] .lib-summary-tile.active {
+      border-color: #5BA4FF !important;
+      box-shadow: 0 0 0 2px rgba(91, 164, 255, 0.22), 0 8px 20px rgba(0,0,0,0.2) !important;
+    }
+    [data-theme="dark"] .lib-summary-tile:hover {
+      border-color: rgba(91, 164, 255, 0.4) !important;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       END COMMAND-CENTER REDESIGN
+    ════════════════════════════════════════════════════════════════ */
+
+    /* ── Voice Input ── */
+    .vi-wrap { position: relative; display: block; }
+    .vi-wrap input,
+    .vi-wrap textarea { padding-right: 42px !important; width: 100%; box-sizing: border-box; }
+    .vi-btn {
+      position: absolute;
+      right: 8px; top: 50%;
+      transform: translateY(-50%);
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-2, #e5e5e3);
+      background: var(--surface, #fff);
+      color: var(--muted, #999);
+      cursor: pointer;
+      display: grid; place-items: center;
+      transition: border-color 0.15s, color 0.15s, box-shadow 0.15s, background 0.15s;
+      z-index: 2; padding: 0; flex-shrink: 0;
+    }
+    .vi-btn:hover { border-color: #2D8CFF; color: #2D8CFF; }
+    .vi-btn.listening {
+      background: #FF4444; border-color: #FF4444; color: #fff;
+      animation: vi-pulse 1.2s ease infinite;
+    }
+    .vi-textarea .vi-btn { top: 9px; transform: none; }
+    @keyframes vi-pulse {
+      0%,100% { box-shadow: 0 0 0 3px rgba(255,68,68,0.2); }
+      50%      { box-shadow: 0 0 0 7px rgba(255,68,68,0.07); }
+    }
+    .vi-hint { font-size: 11px; color: var(--muted); margin-top: 4px; min-height: 15px; }
+    /* Search modal: mic sits inline in the flex row */
+    .vi-inline { position: static; transform: none; flex-shrink: 0; }
+    [data-theme="dark"] .vi-btn { background: var(--surface-2, #1C1A17); border-color: var(--border-2, #2A2826); }
+    [data-theme="dark"] .vi-btn:hover { border-color: #5BA4FF; color: #5BA4FF; }
   </style>
 </head>
 
@@ -6319,6 +6831,8 @@
 
           <!-- 3. Library -->
           <div class="library-section">
+            <!-- Board stats bar (Command-Center overview) -->
+            <div class="cc-board-stats" id="ccBoardStats" style="display:none;"></div>
             <div class="library-header">
               <span class="library-title">Library</span>
             </div>
@@ -6817,12 +7331,18 @@
           </div>
           <div>
             <label>Front (Question / Prompt)</label>
-            <textarea id="customFrontInput" class="custom-card-input"
-              placeholder="e.g., What is the capital of France?"></textarea>
+            <div class="vi-wrap vi-textarea">
+              <textarea id="customFrontInput" class="custom-card-input"
+                placeholder="e.g., What is the capital of France?"></textarea>
+              <button type="button" class="vi-btn" data-vi="customFrontInput" onclick="startVoice('customFrontInput')" title="Voice input" aria-label="Voice input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button>
+            </div>
           </div>
           <div>
             <label>Back (Answer / Details)</label>
-            <textarea id="customBackInput" class="custom-card-input" placeholder="e.g., Paris"></textarea>
+            <div class="vi-wrap vi-textarea">
+              <textarea id="customBackInput" class="custom-card-input" placeholder="e.g., Paris"></textarea>
+              <button type="button" class="vi-btn" data-vi="customBackInput" onclick="startVoice('customBackInput')" title="Voice input" aria-label="Voice input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button>
+            </div>
           </div>
           <button class="custom-card-btn" onclick="saveCustomCard()">Save Card</button>
         </div>
@@ -7986,7 +8506,9 @@
       function getDueCount() {
         const today = new Date().toISOString().split('T')[0];
         let newCount = 0, review = 0, lapsed = 0;
-        [...ALL_VOCAB, ...ALL_CUSTOM_CARDS].forEach(item => {
+        // Only count user-created vocab (id starts with 'c_') — not core vocabulary.json words
+        const userVocab = ALL_VOCAB.filter(w => w.id && w.id.startsWith('c_'));
+        [...userVocab, ...ALL_CUSTOM_CARDS].forEach(item => {
           const s = item.sm2 || defaultSM2();
           const due = !s.dueDate || s.dueDate <= today;
           if (s.state === 'new') newCount++;
@@ -10602,9 +11124,25 @@ No markdown, no explanation.`;
         const nc = document.getElementById('libTileCountNotes');
         const fc = document.getElementById('libTileCountFlashcards');
         const vc = document.getElementById('libTileCountVocab');
-        if (nc) nc.textContent = `${notesItems.length} note${notesItems.length !== 1 ? 's' : ''}`;
-        if (fc) fc.textContent = `${flashItems.length} flashcard${flashItems.length !== 1 ? 's' : ''}`;
-        if (vc) vc.textContent = `${vocabItems.length} word${vocabItems.length !== 1 ? 's' : ''}`;
+        if (nc) nc.textContent = notesItems.length;
+        if (fc) fc.textContent = flashItems.length;
+        if (vc) vc.textContent = vocabItems.length;
+
+        // Command-Center board stats bar
+        const boardEl = document.getElementById('ccBoardStats');
+        if (boardEl) {
+          const totalItems = notesItems.length + flashItems.length + vocabItems.length;
+          const masteredCount = vocabItems.filter(w => w.sm2 && w.sm2.repetitions >= 3).length
+            + flashItems.filter(c => c.sm2 && c.sm2.repetitions >= 3).length;
+          const due = (typeof getDueCount === 'function') ? getDueCount() : null;
+          const dueTotal = due ? (due.new + due.review + due.lapsed) : 0;
+          boardEl.innerHTML = `
+            <div class="cc-board-stat"><div class="cc-board-stat-n">${totalItems}</div><div class="cc-board-stat-l">Total Items</div></div>
+            <div class="cc-board-stat"><div class="cc-board-stat-n green">${masteredCount}</div><div class="cc-board-stat-l">Mastered</div></div>
+            <div class="cc-board-stat"><div class="cc-board-stat-n${dueTotal > 0 ? ' red' : ' blue'}">${dueTotal}</div><div class="cc-board-stat-l">Due Today</div></div>
+            <div class="cc-board-stat"><div class="cc-board-stat-n blue">${vocabItems.length}</div><div class="cc-board-stat-l">Vocab Words</div></div>`;
+          boardEl.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
 
         // Recently Added — shown only in Complete Library
         const recentEl = document.getElementById('recentlyAddedSection');
@@ -12178,6 +12716,95 @@ No markdown, no extra text.`;
       }
 
       // ──────────────────────────────────────────────────────────────
+      // @@SECTION: JSVoiceInput
+      // ──────────────────────────────────────────────────────────────
+      // ── VOICE INPUT MODULE ──
+      // Web Speech API wrapper — live interim transcription, auto-restart on pause.
+      // Gracefully no-ops on unsupported browsers (Firefox).
+      const _VI = (() => {
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SR) return { start: () => {}, stop: () => {} };
+
+        let _rec = null, _activeId = null, _listening = false, _finalText = '';
+
+        const _el   = id => document.getElementById(id);
+        const _btn  = id => document.querySelector(`.vi-btn[data-vi="${id}"]`);
+        const _hint = id => document.getElementById('vi-hint-' + id);
+
+        function start(inputId) {
+          // Toggle off if already listening on same field
+          if (_listening && _activeId === inputId) { stop(); return; }
+          if (_listening) stop();
+
+          const inp = _el(inputId);
+          if (!inp) return;
+
+          _activeId  = inputId;
+          _finalText = inp.value || '';
+          _listening = true;
+
+          const b = _btn(inputId);
+          if (b) b.classList.add('listening');
+          const h = _hint(inputId);
+          if (h) h.textContent = '🎤 Listening… speak now';
+
+          _rec = new SR();
+          _rec.continuous     = true;
+          _rec.interimResults = true;
+          _rec.lang           = navigator.language || 'en-US';
+
+          _rec.onresult = e => {
+            let interim = '';
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+              const t = e.results[i][0].transcript;
+              if (e.results[i].isFinal) {
+                _finalText += (_finalText && !/\s$/.test(_finalText) ? ' ' : '') + t;
+              } else {
+                interim = t;
+              }
+            }
+            const el = _el(_activeId);
+            if (!el) return;
+            el.value = _finalText + (interim ? ' ' + interim : '');
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+          };
+
+          _rec.onerror = e => {
+            const h = _hint(_activeId);
+            if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+              if (h) h.textContent = '⚠️ Microphone permission denied — check browser settings';
+            } else if (e.error !== 'aborted') {
+              if (h) h.textContent = '⚠️ Voice error: ' + e.error;
+            }
+            stop();
+          };
+
+          // Auto-restart on natural pause so user can keep talking
+          _rec.onend = () => { if (_listening) { try { _rec.start(); } catch(_) {} } };
+
+          try { _rec.start(); }
+          catch(e) { stop(); }
+        }
+
+        function stop() {
+          _listening = false;
+          if (_rec) { try { _rec.stop(); } catch(_) {} _rec = null; }
+          const b = _btn(_activeId);
+          if (b) b.classList.remove('listening');
+          const h = _hint(_activeId);
+          if (h) h.textContent = '';
+          _activeId = null;
+        }
+
+        // Stop on Escape (modal close handles the rest)
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && _listening) stop(); });
+
+        return { start, stop };
+      })();
+
+      function startVoice(id) { _VI.start(id); }
+      function stopVoice()     { _VI.stop();   }
+
       // @@SECTION: JSMobileMenu
       // ──────────────────────────────────────────────────────────────
       function toggleMobileMenu() {
@@ -12340,6 +12967,7 @@ No markdown, no extra text.`;
       <div class="search-input-row">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
         <input id="searchInput" class="search-input" type="text" placeholder="Search vocab, notes, flashcards…" autocomplete="off" oninput="runSearch(this.value)" onkeydown="handleSearchKey(event)">
+        <button type="button" class="vi-btn vi-inline" data-vi="searchInput" onclick="startVoice('searchInput')" title="Voice search" aria-label="Voice search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button>
         <kbd style="font-size:11px;color:var(--muted);background:var(--bg-2);border:1px solid var(--border);border-radius:4px;padding:2px 6px;cursor:pointer;" onclick="closeSearch()">Esc</kbd>
       </div>
       <div id="searchResults" class="search-results"></div>
@@ -12376,15 +13004,22 @@ No markdown, no extra text.`;
       </div>
 
       <!-- Vocab word input — shown only for vocab-only mode -->
-      <input id="addModalWord" class="add-modal-word-input" type="text"
-        placeholder="Type a word or phrase…"
-        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();handleAddModalGenerate();}">
+      <div class="vi-wrap">
+        <input id="addModalWord" class="add-modal-word-input" type="text"
+          placeholder="Type a word or phrase…"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();handleAddModalGenerate();}">
+        <button type="button" class="vi-btn" data-vi="addModalWord" onclick="startVoice('addModalWord')" title="Voice input" aria-label="Voice input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button>
+      </div>
 
       <!-- Text input area — always visible -->
       <div id="addModalTextArea" class="add-modal-field">
         <label>Paste or type your content</label>
-        <textarea id="addMultiText" rows="5"
-          placeholder="Paste any text — notes, passages, study material…"></textarea>
+        <div class="vi-wrap vi-textarea">
+          <textarea id="addMultiText" rows="5"
+            placeholder="Paste any text — notes, passages, study material…"></textarea>
+          <button type="button" class="vi-btn" data-vi="addMultiText" onclick="startVoice('addMultiText')" title="Voice input" aria-label="Voice input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></button>
+        </div>
+        <div class="vi-hint" id="vi-hint-addMultiText"></div>
       </div>
 
       <!-- Vocab context (shown only for vocab-only) -->

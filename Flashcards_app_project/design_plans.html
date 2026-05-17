@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexora — 4 UX Design Plans</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f0f0f; color: #e0e0e0; }
+
+  /* ── PRESENTATION SHELL ── */
+  .presentation { max-width: 1400px; margin: 0 auto; padding: 40px 24px; }
+  .page-title { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  .page-sub { color: #888; font-size: 0.95rem; margin-bottom: 56px; }
+
+  .plan-block { margin-bottom: 100px; }
+  .plan-header { margin-bottom: 36px; }
+  .plan-number { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #666; margin-bottom: 6px; }
+  .plan-title { font-size: 1.7rem; font-weight: 800; color: #fff; margin-bottom: 10px; }
+  .plan-tagline { font-size: 1rem; color: #aaa; margin-bottom: 16px; }
+  .plan-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .pill { padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+
+  .screens-row { display: grid; grid-template-columns: 1fr 360px; gap: 32px; align-items: start; }
+  @media (max-width: 900px) { .screens-row { grid-template-columns: 1fr; } }
+
+  .screen-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-bottom: 12px; }
+
+  /* Desktop browser chrome */
+  .browser-chrome { background: #1e1e1e; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.6); }
+  .browser-bar { background: #2a2a2a; padding: 10px 16px; display: flex; align-items: center; gap: 8px; }
+  .browser-dots { display: flex; gap: 5px; }
+  .browser-dot { width: 11px; height: 11px; border-radius: 50%; }
+  .browser-url { flex: 1; background: #333; border-radius: 5px; padding: 4px 12px; font-size: 11px; color: #888; margin: 0 12px; }
+  .browser-screen { overflow: hidden; }
+
+  /* Mobile chrome */
+  .mobile-chrome { background: #1a1a1a; border-radius: 24px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.6); max-width: 320px; margin: 0 auto; border: 2px solid #333; }
+  .mobile-notch { background: #111; height: 28px; display: flex; align-items: center; justify-content: center; }
+  .mobile-notch-bar { background: #333; width: 80px; height: 14px; border-radius: 999px; }
+  .mobile-screen { overflow: hidden; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PLAN 1: TODAY-FIRST DASHBOARD */
+  /* ═══════════════════════════════════════════════════════ */
+  .p1 { --p1-bg: #FDFAF6; --p1-surface: #fff; --p1-sidebar: #fff; --p1-em: #10B981; --p1-text: #1A1612; --p1-muted: #6E6660; --p1-border: #EDE8E0; --p1-amber: #F59E0B; }
+
+  .p1-layout { display: flex; height: 560px; background: var(--p1-bg); font-family: 'Segoe UI', sans-serif; }
+
+  .p1-sidebar { width: 230px; background: var(--p1-sidebar); border-right: 1px solid var(--p1-border); padding: 18px 12px; display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+  .p1-logo-row { display: flex; align-items: center; gap: 8px; padding: 4px 6px 16px; }
+  .p1-logo-mark { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#34D399,#10B981); color:#fff; display:grid;place-items:center; font-weight:800;font-size:13px; }
+  .p1-logo-name { font-weight:800; font-size:15px; background: linear-gradient(90deg,#10B981,#34D399); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .p1-section-lbl { font-size:10px; font-weight:700; color:#A09890; letter-spacing:0.08em; text-transform:uppercase; padding: 10px 8px 4px; }
+  .p1-nav-item { display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:999px; font-size:12.5px; font-weight:500; color:var(--p1-text); cursor:pointer; }
+  .p1-nav-item.active { background:var(--p1-em); color:#fff; }
+  .p1-nav-item:not(.active):hover { background:#ECFDF5; }
+  .p1-nav-dot { width:7px; height:7px; border-radius:50%; background:var(--p1-em); flex-shrink:0; }
+  .p1-nav-dot.amber { background:var(--p1-amber); }
+  .p1-nav-dot.purple { background:#8B5CF6; }
+  .p1-streak-card { margin-top:auto; background:#ECFDF5; border-radius:12px; padding:12px; border:1px solid #D1FAE5; }
+  .p1-streak-num { font-size:22px; font-weight:800; color:var(--p1-em); }
+  .p1-streak-lbl { font-size:10px; color:var(--p1-muted); margin-top:2px; }
+
+  .p1-main { flex:1; overflow:hidden; display:flex; flex-direction:column; }
+  .p1-topbar { padding:14px 24px; border-bottom:1px solid var(--p1-border); display:flex; align-items:center; justify-content:space-between; background:#fff; }
+  .p1-topbar-greet { font-size:14px; font-weight:700; color:var(--p1-text); }
+  .p1-topbar-sub { font-size:11px; color:var(--p1-muted); }
+  .p1-topbar-btn { background:var(--p1-em); color:#fff; border:none; border-radius:999px; padding:7px 14px; font-size:12px; font-weight:700; cursor:pointer; }
+  .p1-scroll { padding:20px 24px; overflow-y:auto; flex:1; }
+  .p1-today-card { background:linear-gradient(135deg,#10B981,#059669); border-radius:16px; padding:20px; color:#fff; margin-bottom:20px; }
+  .p1-today-label { font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; opacity:0.8; margin-bottom:6px; }
+  .p1-today-count { font-size:2rem; font-weight:800; margin-bottom:4px; }
+  .p1-today-sub { font-size:12px; opacity:0.8; margin-bottom:16px; }
+  .p1-today-chips { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .p1-today-chip { background:rgba(255,255,255,0.2); border-radius:999px; padding:4px 10px; font-size:11px; font-weight:600; }
+  .p1-today-cta { background:#fff; color:#10B981; border:none; border-radius:999px; padding:8px 18px; font-size:12px; font-weight:700; cursor:pointer; }
+  .p1-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+  .p1-stat-card { background:var(--p1-surface); border:1px solid var(--p1-border); border-radius:12px; padding:14px; }
+  .p1-stat-n { font-size:1.4rem; font-weight:800; color:var(--p1-text); }
+  .p1-stat-l { font-size:11px; color:var(--p1-muted); margin-top:2px; }
+  .p1-section-title { font-size:12px; font-weight:700; color:var(--p1-muted); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:10px; }
+  .p1-card-row { display:flex; gap:10px; overflow:hidden; }
+  .p1-mini-card { background:var(--p1-surface); border:1px solid var(--p1-border); border-radius:10px; padding:10px 12px; font-size:12px; flex:1; border-left:3px solid var(--p1-em); }
+  .p1-mini-card.amber { border-left-color:var(--p1-amber); }
+  .p1-mini-card.purple { border-left-color:#8B5CF6; }
+  .p1-mini-word { font-weight:700; font-size:13px; color:var(--p1-text); }
+  .p1-mini-def { font-size:11px; color:var(--p1-muted); margin-top:2px; }
+
+  /* Mobile P1 */
+  .p1m { background:var(--p1-bg); font-family:'Segoe UI',sans-serif; height:560px; overflow:hidden; }
+  .p1m-header { background:#fff; padding:12px 16px 10px; border-bottom:1px solid var(--p1-border); }
+  .p1m-header-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:2px; }
+  .p1m-greeting { font-size:14px; font-weight:800; color:var(--p1-text); }
+  .p1m-date { font-size:10px; color:var(--p1-muted); }
+  .p1m-scroll { padding:14px; overflow-y:auto; height:calc(100% - 108px); }
+  .p1m-today { background:linear-gradient(135deg,#10B981,#059669); border-radius:14px; padding:16px; color:#fff; margin-bottom:14px; }
+  .p1m-today-lbl { font-size:10px; font-weight:700; opacity:0.8; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:4px; }
+  .p1m-today-n { font-size:1.8rem; font-weight:800; margin-bottom:3px; }
+  .p1m-today-sub { font-size:11px; opacity:0.8; margin-bottom:12px; }
+  .p1m-today-btn { background:#fff; color:#10B981; border:none; border-radius:999px; padding:7px 16px; font-size:12px; font-weight:700; }
+  .p1m-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  .p1m-stat { background:#fff; border:1px solid var(--p1-border); border-radius:10px; padding:12px; }
+  .p1m-stat-n { font-size:1.2rem; font-weight:800; color:var(--p1-text); }
+  .p1m-stat-l { font-size:10px; color:var(--p1-muted); margin-top:2px; }
+  .p1m-lbl { font-size:10px; font-weight:700; color:var(--p1-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
+  .p1m-card { background:#fff; border:1px solid var(--p1-border); border-radius:10px; padding:10px 12px; margin-bottom:8px; border-left:3px solid var(--p1-em); }
+  .p1m-card.amber { border-left-color:var(--p1-amber); }
+  .p1m-word { font-size:13px; font-weight:700; color:var(--p1-text); }
+  .p1m-def { font-size:11px; color:var(--p1-muted); margin-top:2px; }
+  .p1m-bottom-nav { position:absolute; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--p1-border); display:flex; height:56px; }
+  .p1m-bnav-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; font-size:10px; color:var(--p1-muted); }
+  .p1m-bnav-item.active { color:var(--p1-em); }
+  .p1m-bnav-icon { width:18px; height:18px; background:currentColor; border-radius:3px; opacity:0.7; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PLAN 2: COMMAND CENTER (Notion-Inspired) */
+  /* ═══════════════════════════════════════════════════════ */
+  .p2 { --p2-bg:#F7F6F3; --p2-surface:#fff; --p2-sidebar:#FBFAF8; --p2-text:#37352F; --p2-muted:#9B9A97; --p2-border:#E9E9E7; --p2-accent:#2D8CFF; --p2-hover:#F1F1EF; }
+
+  .p2-layout { display:flex; height:560px; background:var(--p2-bg); font-family:'Segoe UI',sans-serif; }
+  .p2-sidebar { width:240px; background:var(--p2-sidebar); border-right:1px solid var(--p2-border); padding:12px 8px; flex-shrink:0; overflow-y:auto; }
+  .p2-sidebar-top { padding:8px; display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .p2-workspace-icon { width:24px; height:24px; border-radius:5px; background:linear-gradient(135deg,#2D8CFF,#0066FF); display:grid;place-items:center; color:#fff; font-size:11px; font-weight:800; }
+  .p2-workspace-name { font-size:13px; font-weight:700; color:var(--p2-text); }
+  .p2-search-bar { background:var(--p2-hover); border-radius:6px; padding:7px 10px; font-size:12px; color:var(--p2-muted); display:flex; align-items:center; gap:6px; margin-bottom:12px; }
+  .p2-nav-section { margin-bottom:16px; }
+  .p2-nav-title { font-size:11px; font-weight:600; color:var(--p2-muted); padding:4px 8px; margin-bottom:2px; }
+  .p2-nav-item { display:flex; align-items:center; gap:6px; padding:6px 8px; border-radius:6px; font-size:12.5px; color:var(--p2-text); cursor:pointer; }
+  .p2-nav-item.active { background:#E8F0FE; color:var(--p2-accent); font-weight:600; }
+  .p2-nav-item:hover:not(.active) { background:var(--p2-hover); }
+  .p2-nav-icon { width:16px; height:16px; opacity:0.6; flex-shrink:0; font-size:14px; }
+  .p2-nav-indent { padding-left:24px; }
+  .p2-nav-tree-dot { width:6px; height:6px; border-radius:50%; background:var(--p2-muted); flex-shrink:0; opacity:0.5; }
+  .p2-nav-badge { margin-left:auto; background:#E8F0FE; color:var(--p2-accent); border-radius:999px; padding:1px 7px; font-size:10px; font-weight:700; }
+
+  .p2-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+  .p2-topbar { padding:12px 28px; border-bottom:1px solid var(--p2-border); display:flex; align-items:center; gap:12px; background:#fff; }
+  .p2-breadcrumb { font-size:13px; color:var(--p2-muted); display:flex; align-items:center; gap:6px; }
+  .p2-breadcrumb-active { color:var(--p2-text); font-weight:600; }
+  .p2-topbar-right { margin-left:auto; display:flex; gap:8px; }
+  .p2-topbar-btn { padding:5px 12px; border-radius:6px; font-size:12px; font-weight:600; border:1.5px solid var(--p2-border); background:#fff; color:var(--p2-text); cursor:pointer; }
+  .p2-topbar-btn.primary { background:var(--p2-accent); color:#fff; border-color:var(--p2-accent); }
+
+  .p2-content { padding:28px 28px; overflow-y:auto; flex:1; }
+  .p2-page-title { font-size:1.8rem; font-weight:700; color:var(--p2-text); margin-bottom:4px; }
+  .p2-page-sub { font-size:13px; color:var(--p2-muted); margin-bottom:28px; }
+  .p2-board { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:24px; }
+  .p2-board-card { background:#fff; border:1.5px solid var(--p2-border); border-radius:10px; padding:16px; }
+  .p2-board-icon { font-size:20px; margin-bottom:8px; }
+  .p2-board-title { font-size:12px; font-weight:700; color:var(--p2-text); margin-bottom:4px; }
+  .p2-board-n { font-size:1.6rem; font-weight:800; color:var(--p2-text); }
+  .p2-board-sub { font-size:11px; color:var(--p2-muted); margin-top:3px; }
+  .p2-db-row { display:flex; gap:14px; }
+  .p2-table { background:#fff; border:1.5px solid var(--p2-border); border-radius:10px; overflow:hidden; flex:1; }
+  .p2-table-head { background:#F9F9F8; display:grid; grid-template-columns:2fr 1fr 1fr 1fr; padding:8px 14px; font-size:11px; font-weight:700; color:var(--p2-muted); text-transform:uppercase; letter-spacing:0.06em; border-bottom:1px solid var(--p2-border); }
+  .p2-table-row { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; padding:9px 14px; font-size:12px; color:var(--p2-text); border-bottom:1px solid #F5F5F4; }
+  .p2-table-row:last-child { border-bottom:none; }
+  .p2-pill { border-radius:999px; padding:2px 8px; font-size:10px; font-weight:700; }
+  .p2-pill.new { background:#FEE2E2; color:#EF4444; }
+  .p2-pill.learning { background:#FEF3C7; color:#D97706; }
+  .p2-pill.mastered { background:#D1FAE5; color:#059669; }
+  .p2-insight { background:#F0F7FF; border:1.5px solid #BFDBFE; border-radius:10px; padding:14px; flex-shrink:0; width:200px; }
+  .p2-insight-title { font-size:12px; font-weight:700; color:#1D4ED8; margin-bottom:10px; }
+  .p2-insight-row { display:flex; justify-content:space-between; font-size:11px; color:var(--p2-text); margin-bottom:6px; }
+  .p2-progress-bar { background:#BFDBFE; border-radius:999px; height:5px; margin-top:3px; overflow:hidden; }
+  .p2-progress-fill { background:#2D8CFF; height:100%; border-radius:999px; }
+
+  /* Mobile P2 */
+  .p2m { background:#F7F6F3; font-family:'Segoe UI',sans-serif; height:560px; position:relative; overflow:hidden; }
+  .p2m-header { background:#fff; padding:10px 14px; border-bottom:1px solid #E9E9E7; display:flex; align-items:center; gap:10px; }
+  .p2m-back { font-size:18px; color:#2D8CFF; }
+  .p2m-title { font-size:14px; font-weight:700; color:#37352F; }
+  .p2m-search { background:#F1F1EF; border-radius:8px; margin:10px 14px; padding:8px 12px; font-size:12px; color:#9B9A97; display:flex; align-items:center; gap:6px; }
+  .p2m-scroll { padding:10px 14px; overflow-y:auto; height:calc(100% - 110px); }
+  .p2m-section-title { font-size:11px; font-weight:700; color:#9B9A97; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
+  .p2m-stat-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:16px; }
+  .p2m-stat { background:#fff; border-radius:8px; padding:10px; text-align:center; border:1px solid #E9E9E7; }
+  .p2m-stat-n { font-size:1.2rem; font-weight:800; color:#37352F; }
+  .p2m-stat-l { font-size:9px; color:#9B9A97; margin-top:2px; }
+  .p2m-item { background:#fff; border:1px solid #E9E9E7; border-radius:8px; padding:10px 12px; margin-bottom:8px; display:flex; align-items:center; gap:10px; }
+  .p2m-item-icon { width:32px; height:32px; border-radius:6px; background:#E8F0FE; display:grid; place-items:center; font-size:14px; flex-shrink:0; }
+  .p2m-item-word { font-size:13px; font-weight:600; color:#37352F; }
+  .p2m-item-def { font-size:11px; color:#9B9A97; margin-top:2px; }
+  .p2m-item-badge { margin-left:auto; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PLAN 3: GAMIFIED (Duolingo-Inspired) */
+  /* ═══════════════════════════════════════════════════════ */
+  .p3 { --p3-bg:#F9F9F9; --p3-surface:#fff; --p3-green:#58CC02; --p3-green-d:#46A302; --p3-blue:#1CB0F6; --p3-amber:#FF9600; --p3-red:#FF4B4B; --p3-purple:#CE82FF; --p3-text:#3C3C3C; --p3-muted:#777; --p3-border:#E5E5E5; }
+
+  .p3-layout { display:flex; height:560px; background:var(--p3-bg); font-family:'Segoe UI',sans-serif; }
+  .p3-sidebar { width:220px; background:var(--p3-surface); border-right:1px solid var(--p3-border); padding:16px 12px; flex-shrink:0; display:flex; flex-direction:column; gap:2px; }
+  .p3-logo-row { display:flex; align-items:center; gap:8px; padding:6px 8px 16px; }
+  .p3-logo-owl { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#58CC02,#46A302); display:grid; place-items:center; font-size:16px; }
+  .p3-logo-name { font-size:15px; font-weight:800; color:var(--p3-text); }
+
+  .p3-xp-card { background:linear-gradient(135deg,#FFF9F0,#FFF3D6); border:2px solid #FFD966; border-radius:12px; padding:12px; margin-bottom:12px; }
+  .p3-xp-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .p3-xp-label { font-size:11px; font-weight:700; color:#8B6914; }
+  .p3-xp-num { font-size:13px; font-weight:800; color:#FF9600; }
+  .p3-xp-bar { background:#FFEAA7; border-radius:999px; height:8px; overflow:hidden; }
+  .p3-xp-fill { background:linear-gradient(90deg,#FF9600,#FFB347); height:100%; border-radius:999px; width:62%; }
+  .p3-xp-sub { font-size:10px; color:#8B6914; margin-top:4px; }
+
+  .p3-streak-row { display:flex; align-items:center; gap:6px; background:#FFF5F5; border:1.5px solid #FFD0D0; border-radius:10px; padding:8px 10px; margin-bottom:12px; }
+  .p3-streak-fire { font-size:18px; }
+  .p3-streak-n { font-size:15px; font-weight:800; color:#FF4B4B; }
+  .p3-streak-lbl { font-size:11px; color:#FF4B4B; }
+
+  .p3-nav-item { display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px; font-size:13px; font-weight:600; color:var(--p3-muted); cursor:pointer; }
+  .p3-nav-item.active { background:#F0FFF0; color:var(--p3-green-d); }
+  .p3-nav-item:not(.active):hover { background:#F9F9F9; }
+  .p3-nav-icon { font-size:16px; }
+  .p3-nav-xp { margin-left:auto; font-size:10px; font-weight:700; color:var(--p3-amber); background:#FFF3D6; border-radius:999px; padding:2px 6px; }
+
+  .p3-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+  .p3-topbar { padding:12px 24px; border-bottom:1px solid var(--p3-border); background:#fff; display:flex; align-items:center; justify-content:space-between; }
+  .p3-topbar-title { font-size:14px; font-weight:800; color:var(--p3-text); }
+  .p3-topbar-gems { display:flex; align-items:center; gap:6px; }
+  .p3-gem { display:flex; align-items:center; gap:4px; font-size:12px; font-weight:700; }
+
+  .p3-content { padding:20px 24px; overflow-y:auto; flex:1; }
+  .p3-section-title { font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--p3-muted); margin-bottom:12px; }
+  .p3-due-card { background:linear-gradient(135deg,#58CC02,#46A302); border-radius:16px; padding:18px; color:#fff; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; }
+  .p3-due-left { }
+  .p3-due-label { font-size:11px; font-weight:700; opacity:0.85; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+  .p3-due-count { font-size:2.2rem; font-weight:800; }
+  .p3-due-sub { font-size:12px; opacity:0.85; }
+  .p3-due-btn { background:#fff; color:#46A302; border:none; border-radius:12px; padding:10px 18px; font-size:13px; font-weight:800; cursor:pointer; flex-shrink:0; }
+
+  .p3-path-row { display:flex; gap:12px; overflow:hidden; margin-bottom:20px; }
+  .p3-path-node { background:#fff; border:2px solid var(--p3-border); border-radius:14px; padding:14px; text-align:center; flex:1; position:relative; }
+  .p3-path-node.done { border-color:var(--p3-green); background:#F0FFF0; }
+  .p3-path-node.active { border-color:var(--p3-blue); background:#F0F8FF; box-shadow:0 4px 12px rgba(28,176,246,0.2); }
+  .p3-path-node.locked { opacity:0.5; }
+  .p3-path-icon { font-size:22px; margin-bottom:6px; }
+  .p3-path-name { font-size:11px; font-weight:700; color:var(--p3-text); }
+  .p3-path-stars { font-size:10px; color:var(--p3-amber); }
+  .p3-path-check { position:absolute; top:-6px; right:-6px; background:var(--p3-green); color:#fff; border-radius:50%; width:18px; height:18px; display:grid; place-items:center; font-size:10px; font-weight:800; }
+
+  .p3-achievement-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .p3-badge { background:#fff; border:1.5px solid var(--p3-border); border-radius:12px; padding:12px 8px; text-align:center; }
+  .p3-badge.earned { border-color:var(--p3-amber); background:#FFFDF0; }
+  .p3-badge-icon { font-size:20px; margin-bottom:4px; }
+  .p3-badge-name { font-size:10px; font-weight:700; color:var(--p3-text); }
+
+  /* Mobile P3 */
+  .p3m { background:#F9F9F9; font-family:'Segoe UI',sans-serif; height:560px; position:relative; overflow:hidden; }
+  .p3m-topbar { background:#fff; padding:10px 14px; border-bottom:1px solid #E5E5E5; display:flex; align-items:center; justify-content:space-between; }
+  .p3m-logo { font-size:14px; font-weight:800; color:#3C3C3C; }
+  .p3m-gems { display:flex; gap:10px; font-size:12px; font-weight:700; }
+  .p3m-streak { display:flex; align-items:center; gap:3px; color:#FF4B4B; }
+  .p3m-xp { display:flex; align-items:center; gap:3px; color:#FF9600; }
+  .p3m-scroll { padding:12px 14px; overflow-y:auto; height:calc(100% - 104px); }
+  .p3m-due-card { background:linear-gradient(135deg,#58CC02,#46A302); border-radius:14px; padding:16px; color:#fff; margin-bottom:14px; }
+  .p3m-due-lbl { font-size:10px; font-weight:700; opacity:0.85; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:3px; }
+  .p3m-due-n { font-size:2rem; font-weight:800; margin-bottom:2px; }
+  .p3m-due-sub { font-size:11px; opacity:0.85; margin-bottom:12px; }
+  .p3m-due-btn { background:#fff; color:#46A302; border:none; border-radius:10px; padding:8px 16px; font-size:12px; font-weight:800; }
+  .p3m-path-row { display:flex; gap:10px; overflow-x:auto; margin-bottom:14px; padding-bottom:4px; }
+  .p3m-path-node { background:#fff; border:2px solid #E5E5E5; border-radius:12px; padding:12px 10px; text-align:center; min-width:80px; flex-shrink:0; }
+  .p3m-path-node.done { border-color:#58CC02; background:#F0FFF0; }
+  .p3m-path-node.active { border-color:#1CB0F6; background:#F0F8FF; }
+  .p3m-path-icon { font-size:18px; margin-bottom:4px; }
+  .p3m-path-name { font-size:10px; font-weight:700; color:#3C3C3C; }
+  .p3m-lbl { font-size:10px; font-weight:700; color:#777; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
+  .p3m-badge-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .p3m-badge { background:#fff; border:1.5px solid #E5E5E5; border-radius:10px; padding:10px 6px; text-align:center; }
+  .p3m-badge.earned { border-color:#FF9600; background:#FFFDF0; }
+  .p3m-badge-icon { font-size:16px; margin-bottom:3px; }
+  .p3m-badge-name { font-size:9px; font-weight:700; color:#3C3C3C; }
+  .p3m-bottom-nav { background:#fff; border-top:1px solid #E5E5E5; height:52px; display:flex; }
+  .p3m-bnav-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; font-size:9px; font-weight:700; color:#777; }
+  .p3m-bnav-item.active { color:#58CC02; }
+  .p3m-bnav-icon { font-size:16px; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PLAN 4: EDITORIAL DARK MODE FIRST */
+  /* ═══════════════════════════════════════════════════════ */
+  .p4 { --p4-bg:#0E0E10; --p4-surface:#161618; --p4-sidebar:#111113; --p4-text:#F0EDE8; --p4-muted:#6B6870; --p4-border:#1F1F22; --p4-accent:#A78BFA; --p4-accent2:#7C3AED; --p4-em:#34D399; }
+
+  .p4-layout { display:flex; height:560px; background:var(--p4-bg); font-family:'Segoe UI',sans-serif; }
+  .p4-sidebar { width:220px; background:var(--p4-sidebar); border-right:1px solid var(--p4-border); padding:16px 10px; flex-shrink:0; display:flex; flex-direction:column; gap:2px; }
+  .p4-logo-row { display:flex; align-items:center; gap:8px; padding:6px 8px 20px; }
+  .p4-logo-mark { width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg,#7C3AED,#A78BFA); color:#fff; display:grid; place-items:center; font-weight:800; font-size:13px; }
+  .p4-logo-name { font-size:15px; font-weight:800; color:var(--p4-text); letter-spacing:-0.02em; }
+  .p4-section-lbl { font-size:10px; font-weight:700; color:var(--p4-muted); letter-spacing:0.1em; text-transform:uppercase; padding:10px 8px 4px; }
+  .p4-nav-item { display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; font-size:12.5px; font-weight:500; color:var(--p4-muted); cursor:pointer; transition:all 0.15s; }
+  .p4-nav-item.active { background:rgba(167,139,250,0.12); color:var(--p4-accent); }
+  .p4-nav-item:not(.active):hover { background:rgba(255,255,255,0.04); color:var(--p4-text); }
+  .p4-nav-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  .p4-mastery-card { margin-top:auto; background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(167,139,250,0.1)); border:1px solid rgba(167,139,250,0.2); border-radius:12px; padding:12px; }
+  .p4-mastery-title { font-size:11px; font-weight:700; color:var(--p4-accent); margin-bottom:8px; }
+  .p4-mastery-bar-bg { background:rgba(255,255,255,0.08); border-radius:999px; height:6px; overflow:hidden; margin-bottom:4px; }
+  .p4-mastery-bar { background:linear-gradient(90deg,#7C3AED,#A78BFA); height:100%; border-radius:999px; }
+  .p4-mastery-pct { font-size:11px; color:var(--p4-muted); }
+
+  .p4-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+  .p4-topbar { padding:12px 24px; border-bottom:1px solid var(--p4-border); background:var(--p4-surface); display:flex; align-items:center; justify-content:space-between; }
+  .p4-topbar-left { }
+  .p4-topbar-title { font-size:14px; font-weight:700; color:var(--p4-text); }
+  .p4-topbar-sub { font-size:11px; color:var(--p4-muted); margin-top:1px; }
+  .p4-topbar-right { display:flex; gap:8px; }
+  .p4-topbar-btn { padding:6px 14px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; border:none; }
+  .p4-topbar-btn.ghost { background:rgba(255,255,255,0.06); color:var(--p4-text); }
+  .p4-topbar-btn.primary { background:linear-gradient(135deg,#7C3AED,#A78BFA); color:#fff; }
+
+  .p4-content { padding:24px; overflow-y:auto; flex:1; }
+  .p4-hero { background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(167,139,250,0.08)); border:1px solid rgba(167,139,250,0.15); border-radius:16px; padding:20px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; }
+  .p4-hero-left { }
+  .p4-hero-label { font-size:10px; font-weight:700; color:var(--p4-accent); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px; }
+  .p4-hero-title { font-size:1.5rem; font-weight:800; color:var(--p4-text); margin-bottom:4px; }
+  .p4-hero-sub { font-size:12px; color:var(--p4-muted); }
+  .p4-hero-stat { text-align:right; }
+  .p4-hero-n { font-size:2.5rem; font-weight:800; background:linear-gradient(135deg,#A78BFA,#34D399); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .p4-hero-nl { font-size:11px; color:var(--p4-muted); }
+  .p4-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:20px; }
+  .p4-stat-card { background:var(--p4-surface); border:1px solid var(--p4-border); border-radius:12px; padding:14px; }
+  .p4-stat-card.accent { border-color:rgba(167,139,250,0.3); background:rgba(167,139,250,0.06); }
+  .p4-stat-card.green { border-color:rgba(52,211,153,0.3); background:rgba(52,211,153,0.06); }
+  .p4-stat-n { font-size:1.5rem; font-weight:800; color:var(--p4-text); }
+  .p4-stat-l { font-size:11px; color:var(--p4-muted); margin-top:3px; }
+  .p4-section-title { font-size:12px; font-weight:700; color:var(--p4-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; }
+  .p4-card-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .p4-vocab-card { background:var(--p4-surface); border:1px solid var(--p4-border); border-radius:10px; padding:12px 14px; }
+  .p4-vocab-card.accent { border-left:3px solid var(--p4-accent); }
+  .p4-vocab-card.green { border-left:3px solid var(--p4-em); }
+  .p4-vocab-word { font-size:14px; font-weight:700; color:var(--p4-text); margin-bottom:3px; }
+  .p4-vocab-phonetic { font-size:11px; color:var(--p4-accent); margin-bottom:4px; }
+  .p4-vocab-def { font-size:11px; color:var(--p4-muted); }
+
+  /* Mobile P4 */
+  .p4m { background:#0E0E10; font-family:'Segoe UI',sans-serif; height:560px; position:relative; overflow:hidden; }
+  .p4m-topbar { background:#161618; padding:10px 14px; border-bottom:1px solid #1F1F22; display:flex; align-items:center; justify-content:space-between; }
+  .p4m-title { font-size:14px; font-weight:800; color:#F0EDE8; }
+  .p4m-add-btn { background:linear-gradient(135deg,#7C3AED,#A78BFA); color:#fff; border:none; border-radius:8px; padding:5px 12px; font-size:12px; font-weight:700; }
+  .p4m-scroll { padding:12px 14px; overflow-y:auto; height:calc(100% - 104px); }
+  .p4m-hero { background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(167,139,250,0.1)); border:1px solid rgba(167,139,250,0.2); border-radius:14px; padding:16px; margin-bottom:14px; }
+  .p4m-hero-lbl { font-size:10px; font-weight:700; color:#A78BFA; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px; }
+  .p4m-hero-n { font-size:2rem; font-weight:800; background:linear-gradient(135deg,#A78BFA,#34D399); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .p4m-hero-sub { font-size:11px; color:#6B6870; margin-bottom:12px; }
+  .p4m-hero-btn { background:linear-gradient(135deg,#7C3AED,#A78BFA); color:#fff; border:none; border-radius:8px; padding:8px 16px; font-size:12px; font-weight:700; }
+  .p4m-stat-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  .p4m-stat { background:#161618; border:1px solid #1F1F22; border-radius:10px; padding:12px; }
+  .p4m-stat.accent { border-color:rgba(167,139,250,0.3); }
+  .p4m-stat-n { font-size:1.2rem; font-weight:800; color:#F0EDE8; }
+  .p4m-stat-l { font-size:10px; color:#6B6870; margin-top:2px; }
+  .p4m-lbl { font-size:10px; font-weight:700; color:#6B6870; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
+  .p4m-card { background:#161618; border:1px solid #1F1F22; border-left:3px solid #A78BFA; border-radius:8px; padding:10px 12px; margin-bottom:8px; }
+  .p4m-card.green { border-left-color:#34D399; }
+  .p4m-word { font-size:13px; font-weight:700; color:#F0EDE8; }
+  .p4m-def { font-size:11px; color:#6B6870; margin-top:2px; }
+  .p4m-bottom-nav { background:#161618; border-top:1px solid #1F1F22; height:52px; display:flex; }
+  .p4m-bnav-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; font-size:9px; font-weight:700; color:#6B6870; }
+  .p4m-bnav-item.active { color:#A78BFA; }
+  .p4m-bnav-icon { font-size:16px; }
+</style>
+</head>
+<body>
+<div class="presentation">
+
+  <div class="page-title">Nexora — UX Design Plans</div>
+  <div class="page-sub">4 distinct directions for improving the user experience. Each plan includes a desktop web view and a mobile web view.</div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- PLAN 1 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="plan-block">
+    <div class="plan-header">
+      <div class="plan-number">Plan 01</div>
+      <div class="plan-title">Today-First Dashboard</div>
+      <div class="plan-tagline">Replace the static library home with a personalized daily action screen that puts due cards front-and-center.</div>
+      <div class="plan-pills">
+        <span class="pill" style="background:#D1FAE5;color:#065F46;">✓ Keeps current sidebar</span>
+        <span class="pill" style="background:#D1FAE5;color:#065F46;">✓ Lowest effort to ship</span>
+        <span class="pill" style="background:#FEF3C7;color:#92400E;">~ Medium redesign</span>
+        <span class="pill" style="background:#ECFDF5;color:#065F46;">Focus: Habit building</span>
+      </div>
+      <div style="font-size:13px;color:#999;line-height:1.7;max-width:700px;">
+        <strong style="color:#ccc;">Key changes:</strong> The main page opens to a "Today" panel showing exactly how many items are due, with a big green CTA to start review. Quick-stats grid (streak, words mastered, accuracy) sits below. The daily queue badge moves from the sidebar into the main area where it gets more attention. The Library is demoted to a secondary tab.
+      </div>
+    </div>
+    <div class="screens-row">
+      <div>
+        <div class="screen-label">Desktop Web — 1280px</div>
+        <div class="browser-chrome">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot" style="background:#FF5F57;"></div>
+              <div class="browser-dot" style="background:#FFBD2E;"></div>
+              <div class="browser-dot" style="background:#28C840;"></div>
+            </div>
+            <div class="browser-url">app.nexora.io</div>
+          </div>
+          <div class="browser-screen p1">
+            <div class="p1-layout">
+              <!-- SIDEBAR -->
+              <div class="p1-sidebar">
+                <div class="p1-logo-row">
+                  <div class="p1-logo-mark">N</div>
+                  <div class="p1-logo-name">Nexora</div>
+                </div>
+                <div class="p1-section-lbl">Decks</div>
+                <div class="p1-nav-item active"><div class="p1-nav-dot"></div> Today</div>
+                <div class="p1-nav-item"><div class="p1-nav-dot"></div> Complete Library</div>
+                <div class="p1-nav-item"><div class="p1-nav-dot amber"></div> IELTS Prep</div>
+                <div class="p1-nav-item"><div class="p1-nav-dot purple"></div> Biology</div>
+                <div class="p1-nav-item"><div class="p1-nav-dot" style="background:#3B82F6;"></div> Spanish</div>
+                <div class="p1-section-lbl" style="margin-top:8px;">Practice</div>
+                <div class="p1-nav-item">🃏 Flashcards</div>
+                <div class="p1-nav-item">🎯 Quiz</div>
+                <div class="p1-nav-item">📊 Stats</div>
+                <div class="p1-streak-card">
+                  <div class="p1-streak-num">🔥 14</div>
+                  <div class="p1-streak-lbl">day streak · keep it up!</div>
+                </div>
+              </div>
+              <!-- MAIN -->
+              <div class="p1-main">
+                <div class="p1-topbar">
+                  <div>
+                    <div class="p1-topbar-greet">Good morning, Suraj 👋</div>
+                    <div class="p1-topbar-sub">Saturday · May 16 · You're on a 14-day streak</div>
+                  </div>
+                  <button class="p1-topbar-btn">+ Add Content</button>
+                </div>
+                <div class="p1-scroll">
+                  <!-- TODAY CARD -->
+                  <div class="p1-today-card">
+                    <div class="p1-today-label">📅 Today's Queue</div>
+                    <div class="p1-today-count">23 cards due</div>
+                    <div class="p1-today-sub">Estimated 8 minutes · Don't break your streak!</div>
+                    <div class="p1-today-chips">
+                      <span class="p1-today-chip">🔴 5 new</span>
+                      <span class="p1-today-chip">🟡 12 review</span>
+                      <span class="p1-today-chip">🟣 6 lapsed</span>
+                    </div>
+                    <button class="p1-today-cta">Start Review →</button>
+                  </div>
+                  <!-- STATS GRID -->
+                  <div class="p1-grid">
+                    <div class="p1-stat-card">
+                      <div class="p1-stat-n" style="color:#10B981;">247</div>
+                      <div class="p1-stat-l">words mastered</div>
+                    </div>
+                    <div class="p1-stat-card">
+                      <div class="p1-stat-n" style="color:#F59E0B;">82%</div>
+                      <div class="p1-stat-l">quiz accuracy</div>
+                    </div>
+                    <div class="p1-stat-card">
+                      <div class="p1-stat-n">58</div>
+                      <div class="p1-stat-l">cards reviewed this week</div>
+                    </div>
+                    <div class="p1-stat-card">
+                      <div class="p1-stat-n" style="color:#8B5CF6;">4</div>
+                      <div class="p1-stat-l">active decks</div>
+                    </div>
+                  </div>
+                  <!-- DUE SOON -->
+                  <div class="p1-section-title">Due Soon — IELTS Prep</div>
+                  <div class="p1-card-row">
+                    <div class="p1-mini-card">
+                      <div class="p1-mini-word">ephemeral</div>
+                      <div class="p1-mini-def">lasting for a very short time</div>
+                    </div>
+                    <div class="p1-mini-card amber">
+                      <div class="p1-mini-word">ubiquitous</div>
+                      <div class="p1-mini-def">present everywhere</div>
+                    </div>
+                    <div class="p1-mini-card purple">
+                      <div class="p1-mini-word">ameliorate</div>
+                      <div class="p1-mini-def">make something bad better</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="screen-label">Mobile Web — 390px</div>
+        <div class="mobile-chrome">
+          <div class="mobile-notch"><div class="mobile-notch-bar"></div></div>
+          <div class="mobile-screen p1">
+            <div class="p1m" style="position:relative;">
+              <div class="p1m-header">
+                <div class="p1m-header-row">
+                  <div class="p1m-greeting">Good morning, Suraj 👋</div>
+                  <span style="font-size:20px;">🔥<span style="font-size:12px;font-weight:800;color:#F59E0B;">14</span></span>
+                </div>
+                <div class="p1m-date">Saturday · May 16 · 14-day streak</div>
+              </div>
+              <div class="p1m-scroll">
+                <div class="p1m-today">
+                  <div class="p1m-today-lbl">📅 Today's Queue</div>
+                  <div class="p1m-today-n">23 cards due</div>
+                  <div class="p1m-today-sub">~8 min · Don't break your streak!</div>
+                  <button class="p1m-today-btn">Start Review →</button>
+                </div>
+                <div class="p1m-grid">
+                  <div class="p1m-stat"><div class="p1m-stat-n" style="color:#10B981;">247</div><div class="p1m-stat-l">mastered</div></div>
+                  <div class="p1m-stat"><div class="p1m-stat-n" style="color:#F59E0B;">82%</div><div class="p1m-stat-l">accuracy</div></div>
+                </div>
+                <div class="p1m-lbl">Due Soon</div>
+                <div class="p1m-card"><div class="p1m-word">ephemeral</div><div class="p1m-def">lasting for a very short time</div></div>
+                <div class="p1m-card amber"><div class="p1m-word">ubiquitous</div><div class="p1m-def">present everywhere</div></div>
+                <div class="p1m-card" style="border-left-color:#8B5CF6;"><div class="p1m-word">ameliorate</div><div class="p1m-def">make something bad better</div></div>
+              </div>
+              <div class="p1m-bottom-nav" style="position:relative;">
+                <div class="p1m-bnav-item active"><div style="font-size:16px;">🏠</div>Today</div>
+                <div class="p1m-bnav-item"><div style="font-size:16px;">📚</div>Library</div>
+                <div class="p1m-bnav-item"><div style="font-size:16px;">🃏</div>Cards</div>
+                <div class="p1m-bnav-item"><div style="font-size:16px;">🎯</div>Quiz</div>
+                <div class="p1m-bnav-item"><div style="font-size:16px;">📊</div>Stats</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- PLAN 2 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="plan-block">
+    <div class="plan-header">
+      <div class="plan-number">Plan 02</div>
+      <div class="plan-title">Command-Center (Notion-Style)</div>
+      <div class="plan-tagline">Dense, information-rich workspace. Treat content like a database — filterable, sortable, keyboard-driven.</div>
+      <div class="plan-pills">
+        <span class="pill" style="background:#DBEAFE;color:#1E40AF;">Power users</span>
+        <span class="pill" style="background:#EDE9FE;color:#5B21B6;">Bigger sidebar</span>
+        <span class="pill" style="background:#FEF3C7;color:#92400E;">~ Medium redesign</span>
+        <span class="pill" style="background:#DBEAFE;color:#1E40AF;">Focus: Data density</span>
+      </div>
+      <div style="font-size:13px;color:#999;line-height:1.7;max-width:700px;">
+        <strong style="color:#ccc;">Key changes:</strong> Sidebar becomes a tree-nav (nested decks, collapsible). Main area shows a board view with metric cards at top + a scrollable table of all content. Per-row SM-2 state pills, due-date columns, deck tags. A small "Insights" panel on the right shows streak + mastery bar. Cmd+K is the primary way to jump anywhere.
+      </div>
+    </div>
+    <div class="screens-row">
+      <div>
+        <div class="screen-label">Desktop Web — 1280px</div>
+        <div class="browser-chrome">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot" style="background:#FF5F57;"></div>
+              <div class="browser-dot" style="background:#FFBD2E;"></div>
+              <div class="browser-dot" style="background:#28C840;"></div>
+            </div>
+            <div class="browser-url">app.nexora.io</div>
+          </div>
+          <div class="browser-screen p2">
+            <div class="p2-layout">
+              <div class="p2-sidebar">
+                <div class="p2-sidebar-top">
+                  <div class="p2-workspace-icon">N</div>
+                  <div class="p2-workspace-name">Suraj's Space</div>
+                </div>
+                <div class="p2-search-bar">🔍 Search or jump to… <span style="margin-left:auto;font-size:10px;background:#E5E5E5;padding:1px 5px;border-radius:3px;">⌘K</span></div>
+                <div class="p2-nav-section">
+                  <div class="p2-nav-title">Workspace</div>
+                  <div class="p2-nav-item active">🏠 Home</div>
+                  <div class="p2-nav-item">📅 Today's Queue <span class="p2-nav-badge">23</span></div>
+                  <div class="p2-nav-item">📊 Analytics</div>
+                </div>
+                <div class="p2-nav-section">
+                  <div class="p2-nav-title">Library</div>
+                  <div class="p2-nav-item">📚 Complete Library</div>
+                  <div class="p2-nav-item p2-nav-indent">▸ IELTS Prep</div>
+                  <div class="p2-nav-item p2-nav-indent">▸ Biology</div>
+                  <div class="p2-nav-item p2-nav-indent">▸ Spanish</div>
+                  <div class="p2-nav-item p2-nav-indent" style="color:#9B9A97;font-style:italic;">+ New deck</div>
+                </div>
+                <div class="p2-nav-section">
+                  <div class="p2-nav-title">Practice</div>
+                  <div class="p2-nav-item">🃏 Flashcards</div>
+                  <div class="p2-nav-item">🎯 Quiz</div>
+                  <div class="p2-nav-item">📝 Notes</div>
+                </div>
+              </div>
+              <div class="p2-main">
+                <div class="p2-topbar">
+                  <div class="p2-breadcrumb">
+                    <span>Nexora</span>
+                    <span>›</span>
+                    <span class="p2-breadcrumb-active">Home</span>
+                  </div>
+                  <div class="p2-topbar-right">
+                    <button class="p2-topbar-btn">⌘K Search</button>
+                    <button class="p2-topbar-btn primary">+ Add</button>
+                  </div>
+                </div>
+                <div class="p2-content">
+                  <div class="p2-page-title">Your Library</div>
+                  <div class="p2-page-sub">247 mastered · 82% accuracy · 🔥 14-day streak</div>
+                  <div class="p2-board">
+                    <div class="p2-board-card">
+                      <div class="p2-board-icon">📚</div>
+                      <div class="p2-board-title">TOTAL WORDS</div>
+                      <div class="p2-board-n">384</div>
+                      <div class="p2-board-sub">across 4 decks</div>
+                    </div>
+                    <div class="p2-board-card">
+                      <div class="p2-board-icon">📅</div>
+                      <div class="p2-board-title">DUE TODAY</div>
+                      <div class="p2-board-n" style="color:#EF4444;">23</div>
+                      <div class="p2-board-sub">5 new · 12 review · 6 lapsed</div>
+                    </div>
+                    <div class="p2-board-card">
+                      <div class="p2-board-icon">✅</div>
+                      <div class="p2-board-title">MASTERED</div>
+                      <div class="p2-board-n" style="color:#10B981;">247</div>
+                      <div class="p2-board-sub">64% of total</div>
+                    </div>
+                  </div>
+                  <div class="p2-db-row">
+                    <div class="p2-table">
+                      <div class="p2-table-head">
+                        <div>Word / Content</div>
+                        <div>Type</div>
+                        <div>State</div>
+                        <div>Due</div>
+                      </div>
+                      <div class="p2-table-row">
+                        <div style="font-weight:600;">ephemeral</div>
+                        <div style="color:#9B9A97;font-size:11px;">vocab</div>
+                        <div><span class="p2-pill learning">Learning</span></div>
+                        <div style="color:#D97706;font-size:11px;">Today</div>
+                      </div>
+                      <div class="p2-table-row">
+                        <div style="font-weight:600;">Cell Division Notes</div>
+                        <div style="color:#9B9A97;font-size:11px;">note</div>
+                        <div><span class="p2-pill mastered">Mastered</span></div>
+                        <div style="color:#9B9A97;font-size:11px;">In 7d</div>
+                      </div>
+                      <div class="p2-table-row">
+                        <div style="font-weight:600;">ubiquitous</div>
+                        <div style="color:#9B9A97;font-size:11px;">vocab</div>
+                        <div><span class="p2-pill new">New</span></div>
+                        <div style="color:#EF4444;font-size:11px;">Today</div>
+                      </div>
+                      <div class="p2-table-row">
+                        <div style="font-weight:600;">Photosynthesis → ATP</div>
+                        <div style="color:#9B9A97;font-size:11px;">card</div>
+                        <div><span class="p2-pill learning">Learning</span></div>
+                        <div style="color:#D97706;font-size:11px;">Tomorrow</div>
+                      </div>
+                    </div>
+                    <div class="p2-insight">
+                      <div class="p2-insight-title">📈 Mastery</div>
+                      <div class="p2-insight-row"><span>IELTS Prep</span><span style="font-weight:700;">78%</span></div>
+                      <div class="p2-progress-bar"><div class="p2-progress-fill" style="width:78%;"></div></div>
+                      <div style="margin-bottom:10px;"></div>
+                      <div class="p2-insight-row"><span>Biology</span><span style="font-weight:700;">54%</span></div>
+                      <div class="p2-progress-bar"><div class="p2-progress-fill" style="width:54%;"></div></div>
+                      <div style="margin-bottom:10px;"></div>
+                      <div class="p2-insight-row"><span>Spanish</span><span style="font-weight:700;">31%</span></div>
+                      <div class="p2-progress-bar"><div class="p2-progress-fill" style="width:31%;"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="screen-label">Mobile Web — 390px</div>
+        <div class="mobile-chrome">
+          <div class="mobile-notch"><div class="mobile-notch-bar"></div></div>
+          <div class="mobile-screen p2">
+            <div class="p2m" style="height:560px;overflow:hidden;background:#F7F6F3;font-family:'Segoe UI',sans-serif;">
+              <div class="p2m-header">
+                <div class="p2m-back">☰</div>
+                <div class="p2m-title">Your Library</div>
+                <button style="margin-left:auto;background:#2D8CFF;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;">+ Add</button>
+              </div>
+              <div class="p2m-search">🔍 Search… <span style="margin-left:auto;font-size:10px;background:#E5E5E5;padding:1px 5px;border-radius:3px;color:#999;">⌘K</span></div>
+              <div class="p2m-scroll">
+                <div class="p2m-section-title">Overview</div>
+                <div class="p2m-stat-row">
+                  <div class="p2m-stat"><div class="p2m-stat-n">384</div><div class="p2m-stat-l">words</div></div>
+                  <div class="p2m-stat"><div class="p2m-stat-n" style="color:#EF4444;">23</div><div class="p2m-stat-l">due today</div></div>
+                  <div class="p2m-stat"><div class="p2m-stat-n" style="color:#10B981;">247</div><div class="p2m-stat-l">mastered</div></div>
+                </div>
+                <div class="p2m-section-title">Recent Content</div>
+                <div class="p2m-item">
+                  <div class="p2m-item-icon">📖</div>
+                  <div><div class="p2m-item-word">ephemeral</div><div class="p2m-item-def">lasting for a very short time</div></div>
+                  <div class="p2m-item-badge"><span style="background:#FEF3C7;color:#D97706;border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700;">Learning</span></div>
+                </div>
+                <div class="p2m-item">
+                  <div class="p2m-item-icon">📝</div>
+                  <div><div class="p2m-item-word">Cell Division</div><div class="p2m-item-def">Biology · Note</div></div>
+                  <div class="p2m-item-badge"><span style="background:#D1FAE5;color:#059669;border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700;">Mastered</span></div>
+                </div>
+                <div class="p2m-item">
+                  <div class="p2m-item-icon">📖</div>
+                  <div><div class="p2m-item-word">ubiquitous</div><div class="p2m-item-def">present everywhere</div></div>
+                  <div class="p2m-item-badge"><span style="background:#FEE2E2;color:#EF4444;border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700;">New</span></div>
+                </div>
+                <div class="p2m-item">
+                  <div class="p2m-item-icon">🃏</div>
+                  <div><div class="p2m-item-word">Photosynthesis → ATP</div><div class="p2m-item-def">Biology · Flashcard</div></div>
+                  <div class="p2m-item-badge"><span style="background:#FEF3C7;color:#D97706;border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700;">Learning</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- PLAN 3 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="plan-block">
+    <div class="plan-header">
+      <div class="plan-number">Plan 03</div>
+      <div class="plan-title">Gamified Learning Path</div>
+      <div class="plan-tagline">Duolingo-meets-Brainscape. XP, streaks, skill nodes and achievement badges make studying feel like a game.</div>
+      <div class="plan-pills">
+        <span class="pill" style="background:#DCFCE7;color:#166534;">Habit-forming</span>
+        <span class="pill" style="background:#FEF9C3;color:#854D0E;">Most engaging</span>
+        <span class="pill" style="background:#FEE2E2;color:#991B1B;">High effort to ship</span>
+        <span class="pill" style="background:#DCFCE7;color:#166534;">Focus: Engagement</span>
+      </div>
+      <div style="font-size:13px;color:#999;line-height:1.7;max-width:700px;">
+        <strong style="color:#ccc;">Key changes:</strong> XP bar and streak counter become primary status elements. Content is organized as "skill nodes" (like Duolingo's path) — tap a node to enter that deck's practice flow. Badges/achievements panel replaces the abstract stats view. Bottom nav always visible on all viewports. Green primary CTA for daily review is always above the fold.
+      </div>
+    </div>
+    <div class="screens-row">
+      <div>
+        <div class="screen-label">Desktop Web — 1280px</div>
+        <div class="browser-chrome">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot" style="background:#FF5F57;"></div>
+              <div class="browser-dot" style="background:#FFBD2E;"></div>
+              <div class="browser-dot" style="background:#28C840;"></div>
+            </div>
+            <div class="browser-url">app.nexora.io</div>
+          </div>
+          <div class="browser-screen p3">
+            <div class="p3-layout">
+              <div class="p3-sidebar">
+                <div class="p3-logo-row">
+                  <div class="p3-logo-owl">🦉</div>
+                  <div class="p3-logo-name">Nexora</div>
+                </div>
+                <!-- XP bar -->
+                <div class="p3-xp-card">
+                  <div class="p3-xp-row">
+                    <div class="p3-xp-label">⚡ XP TODAY</div>
+                    <div class="p3-xp-num">+120 XP</div>
+                  </div>
+                  <div class="p3-xp-bar"><div class="p3-xp-fill"></div></div>
+                  <div class="p3-xp-sub">620 / 1000 XP · Level 8</div>
+                </div>
+                <!-- Streak -->
+                <div class="p3-streak-row">
+                  <div class="p3-streak-fire">🔥</div>
+                  <div class="p3-streak-n">14</div>
+                  <div class="p3-streak-lbl">day streak</div>
+                </div>
+                <div class="p3-nav-item active"><span class="p3-nav-icon">🏠</span> Home <span class="p3-nav-xp">+10</span></div>
+                <div class="p3-nav-item"><span class="p3-nav-icon">🃏</span> Flashcards <span class="p3-nav-xp">+20</span></div>
+                <div class="p3-nav-item"><span class="p3-nav-icon">🎯</span> Quiz <span class="p3-nav-xp">+15</span></div>
+                <div class="p3-nav-item"><span class="p3-nav-icon">📝</span> Notes</div>
+                <div class="p3-nav-item"><span class="p3-nav-icon">🏆</span> Achievements</div>
+                <div class="p3-nav-item"><span class="p3-nav-icon">📊</span> Stats</div>
+              </div>
+              <div class="p3-main">
+                <div class="p3-topbar">
+                  <div class="p3-topbar-title">Learning Path</div>
+                  <div class="p3-topbar-gems">
+                    <div class="p3-gem">🔥 <span>14</span></div>
+                    <div class="p3-gem" style="color:#FF9600;">⚡ <span>620 XP</span></div>
+                    <div class="p3-gem" style="color:#1CB0F6;">💎 <span>48</span></div>
+                  </div>
+                </div>
+                <div class="p3-content">
+                  <!-- Due card -->
+                  <div class="p3-due-card">
+                    <div class="p3-due-left">
+                      <div class="p3-due-label">📅 Daily Review</div>
+                      <div class="p3-due-count">23</div>
+                      <div class="p3-due-sub">cards ready · earn 50 XP</div>
+                    </div>
+                    <button class="p3-due-btn">Start +50XP →</button>
+                  </div>
+                  <!-- Path nodes -->
+                  <div class="p3-section-title">Skill Path — IELTS Prep</div>
+                  <div class="p3-path-row">
+                    <div class="p3-path-node done">
+                      <div class="p3-path-check">✓</div>
+                      <div class="p3-path-icon">📖</div>
+                      <div class="p3-path-name">Basics</div>
+                      <div class="p3-path-stars">★★★</div>
+                    </div>
+                    <div class="p3-path-node done">
+                      <div class="p3-path-check">✓</div>
+                      <div class="p3-path-icon">🔤</div>
+                      <div class="p3-path-name">Vocab I</div>
+                      <div class="p3-path-stars">★★★</div>
+                    </div>
+                    <div class="p3-path-node active">
+                      <div class="p3-path-icon">🎯</div>
+                      <div class="p3-path-name">Vocab II</div>
+                      <div class="p3-path-stars" style="color:#1CB0F6;">● ● ●</div>
+                    </div>
+                    <div class="p3-path-node locked">
+                      <div class="p3-path-icon">🔒</div>
+                      <div class="p3-path-name">Advanced</div>
+                      <div class="p3-path-stars">☆☆☆</div>
+                    </div>
+                  </div>
+                  <!-- Achievements -->
+                  <div class="p3-section-title">Recent Achievements</div>
+                  <div class="p3-achievement-row">
+                    <div class="p3-badge earned"><div class="p3-badge-icon">🔥</div><div class="p3-badge-name">2 Week Streak</div></div>
+                    <div class="p3-badge earned"><div class="p3-badge-icon">💯</div><div class="p3-badge-name">100 Words</div></div>
+                    <div class="p3-badge earned"><div class="p3-badge-icon">⚡</div><div class="p3-badge-name">Speed Quiz</div></div>
+                    <div class="p3-badge"><div class="p3-badge-icon">🏆</div><div class="p3-badge-name">500 Words</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="screen-label">Mobile Web — 390px</div>
+        <div class="mobile-chrome">
+          <div class="mobile-notch"><div class="mobile-notch-bar"></div></div>
+          <div class="mobile-screen p3">
+            <div class="p3m" style="position:relative;">
+              <div class="p3m-topbar">
+                <div class="p3m-logo">🦉 Nexora</div>
+                <div class="p3m-gems">
+                  <div class="p3m-streak">🔥 14</div>
+                  <div class="p3m-xp">⚡ 620</div>
+                  <div style="color:#1CB0F6;display:flex;align-items:center;gap:3px;">💎 48</div>
+                </div>
+              </div>
+              <div class="p3m-scroll">
+                <div class="p3m-due-card">
+                  <div class="p3m-due-lbl">📅 Daily Review</div>
+                  <div class="p3m-due-n">23</div>
+                  <div class="p3m-due-sub">cards ready · earn 50 XP</div>
+                  <button class="p3m-due-btn">Start +50XP →</button>
+                </div>
+                <div class="p3m-lbl">Skill Path</div>
+                <div class="p3m-path-row">
+                  <div class="p3m-path-node done"><div class="p3m-path-icon">📖</div><div class="p3m-path-name">Basics ✓</div></div>
+                  <div class="p3m-path-node done"><div class="p3m-path-icon">🔤</div><div class="p3m-path-name">Vocab I ✓</div></div>
+                  <div class="p3m-path-node active"><div class="p3m-path-icon">🎯</div><div class="p3m-path-name">Vocab II</div></div>
+                  <div class="p3m-path-node" style="opacity:0.5;"><div class="p3m-path-icon">🔒</div><div class="p3m-path-name">Advanced</div></div>
+                </div>
+                <div class="p3m-lbl">Achievements</div>
+                <div class="p3m-badge-row">
+                  <div class="p3m-badge earned"><div class="p3m-badge-icon">🔥</div><div class="p3m-badge-name">2 Weeks</div></div>
+                  <div class="p3m-badge earned"><div class="p3m-badge-icon">💯</div><div class="p3m-badge-name">100 Words</div></div>
+                  <div class="p3m-badge earned"><div class="p3m-badge-icon">⚡</div><div class="p3m-badge-name">Speed</div></div>
+                  <div class="p3m-badge"><div class="p3m-badge-icon">🏆</div><div class="p3m-badge-name">500 Words</div></div>
+                </div>
+              </div>
+              <div class="p3m-bottom-nav">
+                <div class="p3m-bnav-item active"><div class="p3m-bnav-icon">🏠</div>Home</div>
+                <div class="p3m-bnav-item"><div class="p3m-bnav-icon">🃏</div>Cards</div>
+                <div class="p3m-bnav-item"><div class="p3m-bnav-icon">🎯</div>Quiz</div>
+                <div class="p3m-bnav-item"><div class="p3m-bnav-icon">📝</div>Notes</div>
+                <div class="p3m-bnav-item"><div class="p3m-bnav-icon">🏆</div>Wins</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- PLAN 4 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="plan-block">
+    <div class="plan-header">
+      <div class="plan-number">Plan 04</div>
+      <div class="plan-title">Dark Editorial (Premium)</div>
+      <div class="plan-tagline">A deep dark-mode-first premium redesign. Sophisticated, high-contrast, Obsidian/Linear-inspired. Purple accent replaces emerald.</div>
+      <div class="plan-pills">
+        <span class="pill" style="background:#EDE9FE;color:#5B21B6;">Premium feel</span>
+        <span class="pill" style="background:#EDE9FE;color:#5B21B6;">Dark-first</span>
+        <span class="pill" style="background:#FEE2E2;color:#991B1B;">Highest effort</span>
+        <span class="pill" style="background:#EDE9FE;color:#5B21B6;">Focus: Aesthetics</span>
+      </div>
+      <div style="font-size:13px;color:#999;line-height:1.7;max-width:700px;">
+        <strong style="color:#ccc;">Key changes:</strong> Full dark mode as default (opt-in light mode). Purple/violet replaces green as primary accent — feels more "knowledge tool" than "flashcard app". Flashcard hero gets a gradient glow. Stats become beautiful charts. Typography uses larger, bolder weights for headings. The sidebar is slimmer (icon-only on smallest widths, expanding on hover).
+      </div>
+    </div>
+    <div class="screens-row">
+      <div>
+        <div class="screen-label">Desktop Web — 1280px</div>
+        <div class="browser-chrome">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot" style="background:#FF5F57;"></div>
+              <div class="browser-dot" style="background:#FFBD2E;"></div>
+              <div class="browser-dot" style="background:#28C840;"></div>
+            </div>
+            <div class="browser-url" style="background:#1a1a2e;color:#666;">app.nexora.io</div>
+          </div>
+          <div class="browser-screen p4">
+            <div class="p4-layout">
+              <div class="p4-sidebar">
+                <div class="p4-logo-row">
+                  <div class="p4-logo-mark">N</div>
+                  <div class="p4-logo-name">Nexora</div>
+                </div>
+                <div class="p4-section-lbl">Decks</div>
+                <div class="p4-nav-item active"><div class="p4-nav-dot" style="background:#A78BFA;"></div> Today</div>
+                <div class="p4-nav-item"><div class="p4-nav-dot" style="background:#6B6870;"></div> Complete Library</div>
+                <div class="p4-nav-item"><div class="p4-nav-dot" style="background:#F59E0B;"></div> IELTS Prep</div>
+                <div class="p4-nav-item"><div class="p4-nav-dot" style="background:#34D399;"></div> Biology</div>
+                <div class="p4-nav-item"><div class="p4-nav-dot" style="background:#3B82F6;"></div> Spanish</div>
+                <div class="p4-section-lbl" style="margin-top:8px;">Practice</div>
+                <div class="p4-nav-item">🃏 Flashcards</div>
+                <div class="p4-nav-item">🎯 Quiz</div>
+                <div class="p4-nav-item">📊 Stats</div>
+                <div class="p4-mastery-card">
+                  <div class="p4-mastery-title">Mastery Level 8</div>
+                  <div class="p4-mastery-bar-bg"><div class="p4-mastery-bar" style="width:62%;"></div></div>
+                  <div class="p4-mastery-pct">620 / 1000 XP to level 9</div>
+                </div>
+              </div>
+              <div class="p4-main">
+                <div class="p4-topbar">
+                  <div class="p4-topbar-left">
+                    <div class="p4-topbar-title">Good evening, Suraj ✦</div>
+                    <div class="p4-topbar-sub">🔥 14-day streak · 23 cards due today</div>
+                  </div>
+                  <div class="p4-topbar-right">
+                    <button class="p4-topbar-btn ghost">⌘K Search</button>
+                    <button class="p4-topbar-btn primary">+ Add</button>
+                  </div>
+                </div>
+                <div class="p4-content">
+                  <div class="p4-hero">
+                    <div class="p4-hero-left">
+                      <div class="p4-hero-label">✦ Today's session</div>
+                      <div class="p4-hero-title">23 cards ready for review</div>
+                      <div class="p4-hero-sub">5 new · 12 review · 6 lapsed · ~8 min</div>
+                      <button style="margin-top:14px;background:linear-gradient(135deg,#7C3AED,#A78BFA);color:#fff;border:none;border-radius:10px;padding:9px 20px;font-size:12px;font-weight:700;cursor:pointer;">Start Review →</button>
+                    </div>
+                    <div class="p4-hero-stat">
+                      <div class="p4-hero-n">247</div>
+                      <div class="p4-hero-nl">words mastered</div>
+                    </div>
+                  </div>
+                  <div class="p4-grid">
+                    <div class="p4-stat-card accent">
+                      <div class="p4-stat-n" style="background:linear-gradient(135deg,#A78BFA,#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">82%</div>
+                      <div class="p4-stat-l">quiz accuracy</div>
+                    </div>
+                    <div class="p4-stat-card green">
+                      <div class="p4-stat-n" style="color:#34D399;">58</div>
+                      <div class="p4-stat-l">reviewed this week</div>
+                    </div>
+                    <div class="p4-stat-card">
+                      <div class="p4-stat-n">4</div>
+                      <div class="p4-stat-l">active decks</div>
+                    </div>
+                  </div>
+                  <div class="p4-section-title">Recently Added</div>
+                  <div class="p4-card-row">
+                    <div class="p4-vocab-card accent">
+                      <div class="p4-vocab-word">ephemeral</div>
+                      <div class="p4-vocab-phonetic">/ɪˈfem.ər.əl/</div>
+                      <div class="p4-vocab-def">lasting for a very short time</div>
+                    </div>
+                    <div class="p4-vocab-card green">
+                      <div class="p4-vocab-word">ubiquitous</div>
+                      <div class="p4-vocab-phonetic">/juːˈbɪk.wɪ.təs/</div>
+                      <div class="p4-vocab-def">present, appearing or found everywhere</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="screen-label">Mobile Web — 390px</div>
+        <div class="mobile-chrome">
+          <div class="mobile-notch" style="background:#0E0E10;"><div class="mobile-notch-bar" style="background:#222;"></div></div>
+          <div class="mobile-screen p4">
+            <div class="p4m" style="position:relative;">
+              <div class="p4m-topbar">
+                <div class="p4m-title">✦ Good evening</div>
+                <button class="p4m-add-btn">+ Add</button>
+              </div>
+              <div class="p4m-scroll">
+                <div class="p4m-hero">
+                  <div class="p4m-hero-lbl">✦ Today's Session</div>
+                  <div class="p4m-hero-n">23</div>
+                  <div class="p4m-hero-sub">cards ready · ~8 min · 🔥 14 streak</div>
+                  <button class="p4m-hero-btn">Start Review →</button>
+                </div>
+                <div class="p4m-stat-row">
+                  <div class="p4m-stat accent"><div class="p4m-stat-n" style="background:linear-gradient(135deg,#A78BFA,#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">82%</div><div class="p4m-stat-l">accuracy</div></div>
+                  <div class="p4m-stat"><div class="p4m-stat-n" style="color:#34D399;">247</div><div class="p4m-stat-l">mastered</div></div>
+                </div>
+                <div class="p4m-lbl">Recently Added</div>
+                <div class="p4m-card"><div class="p4m-word">ephemeral</div><div class="p4m-def">/ɪˈfem.ər.əl/ · lasting for a very short time</div></div>
+                <div class="p4m-card green"><div class="p4m-word">ubiquitous</div><div class="p4m-def">/juːˈbɪk.wɪ.təs/ · present everywhere</div></div>
+                <div class="p4m-card"><div class="p4m-word">ameliorate</div><div class="p4m-def">/əˈmiː.li.ə.reɪt/ · make something better</div></div>
+              </div>
+              <div class="p4m-bottom-nav">
+                <div class="p4m-bnav-item active"><div class="p4m-bnav-icon">✦</div>Today</div>
+                <div class="p4m-bnav-item"><div class="p4m-bnav-icon">📚</div>Library</div>
+                <div class="p4m-bnav-item"><div class="p4m-bnav-icon">🃏</div>Cards</div>
+                <div class="p4m-bnav-item"><div class="p4m-bnav-icon">🎯</div>Quiz</div>
+                <div class="p4m-bnav-item"><div class="p4m-bnav-icon">📊</div>Stats</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <div style="background:#1a1a1a;border-radius:16px;padding:32px;margin-bottom:60px;">
+    <div style="font-size:1.2rem;font-weight:800;color:#fff;margin-bottom:20px;">Comparison at a Glance</div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead>
+        <tr style="border-bottom:1px solid #333;">
+          <th style="text-align:left;padding:8px 12px;color:#888;font-weight:600;">Plan</th>
+          <th style="text-align:left;padding:8px 12px;color:#888;font-weight:600;">Effort</th>
+          <th style="text-align:left;padding:8px 12px;color:#888;font-weight:600;">Best for</th>
+          <th style="text-align:left;padding:8px 12px;color:#888;font-weight:600;">Key change</th>
+          <th style="text-align:left;padding:8px 12px;color:#888;font-weight:600;">Risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #2a2a2a;">
+          <td style="padding:10px 12px;color:#fff;font-weight:700;">1 — Today-First</td>
+          <td style="padding:10px 12px;color:#34D399;">Low</td>
+          <td style="padding:10px 12px;color:#ccc;">Daily habit users</td>
+          <td style="padding:10px 12px;color:#ccc;">Dashboard home page, prominent due count</td>
+          <td style="padding:10px 12px;color:#F59E0B;">Low</td>
+        </tr>
+        <tr style="border-bottom:1px solid #2a2a2a;">
+          <td style="padding:10px 12px;color:#fff;font-weight:700;">2 — Command Center</td>
+          <td style="padding:10px 12px;color:#F59E0B;">Medium</td>
+          <td style="padding:10px 12px;color:#ccc;">Power users, researchers</td>
+          <td style="padding:10px 12px;color:#ccc;">Table view, tree nav, insight panel</td>
+          <td style="padding:10px 12px;color:#F59E0B;">Medium</td>
+        </tr>
+        <tr style="border-bottom:1px solid #2a2a2a;">
+          <td style="padding:10px 12px;color:#fff;font-weight:700;">3 — Gamified Path</td>
+          <td style="padding:10px 12px;color:#EF4444;">High</td>
+          <td style="padding:10px 12px;color:#ccc;">Students, motivation-driven users</td>
+          <td style="padding:10px 12px;color:#ccc;">XP, skill nodes, badges, bottom nav</td>
+          <td style="padding:10px 12px;color:#EF4444;">High — needs XP backend</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;color:#fff;font-weight:700;">4 — Dark Editorial</td>
+          <td style="padding:10px 12px;color:#EF4444;">High</td>
+          <td style="padding:10px 12px;color:#ccc;">Premium, design-conscious users</td>
+          <td style="padding:10px 12px;color:#ccc;">Dark-first, purple accent, editorial typography</td>
+          <td style="padding:10px 12px;color:#F59E0B;">Medium — CSS-only changes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>
