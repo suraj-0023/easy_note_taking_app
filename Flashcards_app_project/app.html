@@ -8720,14 +8720,19 @@
             }
           } catch (e) { console.warn('Free Dict failed for', wordStr, e); }
 
-          // Tier 1.5: Select 2-3 most relevant definitions for this deck's context
-          if (wordData && wordData.allDefs && wordData.allDefs.length > 2) {
+          // Tier 1.5: AI curates all dictionary fields down to max 2 per category
+          if (wordData) {
             const deckTitle = (projects.find(p => p.id === currentProjectId) || {}).name || currentProjectId;
             const deckVocab = ALL_VOCAB.filter(v => v.projectId === (currentProjectId === 'all' ? 'general' : currentProjectId));
-            const selected = await _selectRelevantDefs(wordStr, wordData.allDefs, deckTitle, deckVocab);
-            if (selected && selected.length) {
-              wordData.definition = selected[0].def;
-              wordData.allDefs = selected;
+            const curated = await _selectRelevantDefs(wordStr, wordData, deckTitle, deckVocab, _dataSources);
+            if (curated) {
+              if (curated.definitions?.length) {
+                wordData.definition = curated.definitions[0].def;
+                wordData.allDefs    = curated.definitions;
+              }
+              if (curated.usage?.length)    wordData.usage    = curated.usage.slice(0, 2);
+              if (curated.synonyms?.length) wordData.synonyms = curated.synonyms.slice(0, 2);
+              if (curated.antonyms?.length) wordData.antonyms = curated.antonyms.slice(0, 2);
               if (!_dataSources.includes('Gemini')) _dataSources.push('Gemini');
             }
           }
@@ -8843,14 +8848,49 @@
         };
       }
 
-      async function _selectRelevantDefs(word, allDefs, deckTitle, deckVocab) {
-        if (!allDefs || allDefs.length <= 2) return null;
-        const defsText = allDefs.map((d, i) => `${i + 1}. [${d.pos}] ${d.def}`).join('\n');
+      async function _selectRelevantDefs(word, wordData, deckTitle, deckVocab, dataSources) {
+        const allDefs = wordData.allDefs || [];
+        if (!allDefs.length) return null;
         const vocabSample = deckVocab.slice(0, 20).map(v => v.word).join(', ') || 'general vocabulary';
-        const prompt = `A student is studying a vocabulary deck titled "${deckTitle}" which contains words like: ${vocabSample}.
-For the word "${word}", here are all available definitions:
+        const defsText = allDefs.map((d, i) =>
+          `${i + 1}. [${d.pos}] "${d.def}"${d.example ? ` — example: "${d.example}"` : ''}`
+        ).join('\n');
+        const usageText = (wordData.usage || []).map((u, i) => `${i + 1}. "${u}"`).join('\n') || 'none';
+        const synonymsText = (wordData.synonyms || []).join(', ') || 'none';
+        const antonymsText = (wordData.antonyms || []).join(', ') || 'none';
+        const sourceLabel = (dataSources || []).filter(s => s !== 'Gemini').join(', ') || 'Dictionary';
+
+        const prompt = `You are a vocabulary curator helping a student build a study deck.
+
+Deck title: "${deckTitle}"
+Sample words already in this deck: ${vocabSample}
+Word: "${word}"
+Data fetched from: ${sourceLabel}
+
+--- ALL DICTIONARY DATA ---
+Definitions:
 ${defsText}
-Select the 2-3 most relevant definitions for this deck's context. Return ONLY a JSON array of 1-based definition numbers, e.g. [1, 3]. No extra text.`;
+
+Usage examples:
+${usageText}
+
+Synonyms: ${synonymsText}
+Antonyms: ${antonymsText}
+
+--- YOUR TASK ---
+Select the most relevant items for a student studying THIS deck.
+Pick AT MOST 2 from each category. Prefer items that match the deck topic and difficulty level.
+Keep "source" exactly as given — do not change it.
+
+Return ONLY raw JSON, no markdown:
+{
+  "source": "${sourceLabel}",
+  "definitions": [{"pos": "...", "def": "...", "example": "..."}],
+  "usage": ["sentence 1", "sentence 2"],
+  "synonyms": ["word1", "word2"],
+  "antonyms": ["word1", "word2"]
+}`;
+
         try {
           const res = await fetch(GEMINI_PROXY_URL, {
             method: 'POST',
@@ -8860,9 +8900,9 @@ Select the 2-3 most relevant definitions for this deck's context. Return ONLY a 
           if (!res.ok) return null;
           const data = await res.json();
           const text = (data.candidates?.[0]?.content?.parts?.[0]?.text || '').trim().replace(/```json\n?|\n?```/g, '');
-          const indices = JSON.parse(text);
-          if (!Array.isArray(indices)) return null;
-          return indices.map(i => allDefs[i - 1]).filter(Boolean).slice(0, 3);
+          const result = JSON.parse(text);
+          if (!result || !Array.isArray(result.definitions)) return null;
+          return result;
         } catch { return null; }
       }
 
@@ -9348,11 +9388,15 @@ Return ONLY a JSON object with keys: {${fieldList}}. No markdown, no extra text.
         document.getElementById('aiLoadingIndicator').style.display = 'block';
 
         try {
+          // Compress before sending to reduce token usage ~80%
+          const compressed = await _compressImageForAI(file);
+          const aiMimeType = 'image/jpeg';
+
           const base64Str = await new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result.split(',')[1]);
             reader.onerror = reject;
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(compressed);
           });
 
           const promptText = `You are an expert OCR and vocabulary assistant. Look at the provided image of a book page and return a JSON object with exactly two keys:
@@ -9367,7 +9411,7 @@ Return only raw JSON with no markdown code fences.`;
               contents: [{
                 parts: [
                   { text: promptText },
-                  { inline_data: { mime_type: file.type, data: base64Str } }
+                  { inline_data: { mime_type: aiMimeType, data: base64Str } }
                 ]
               }]
             })
@@ -9477,6 +9521,25 @@ Return only raw JSON with no markdown code fences.`;
       // ── IMAGE VOCAB MODAL (Generate → image) ──
       let _imageVocabDeckId = '';
 
+      // Resize + compress image before sending to Gemini to reduce token cost ~80%
+      function _compressImageForAI(file, maxDim = 1024, quality = 0.75) {
+        return new Promise((resolve) => {
+          const img = new Image();
+          const url = URL.createObjectURL(file);
+          img.onload = () => {
+            const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+            const canvas = document.createElement('canvas');
+            canvas.width  = Math.round(img.width  * scale);
+            canvas.height = Math.round(img.height * scale);
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            URL.revokeObjectURL(url);
+            canvas.toBlob(blob => resolve(blob), 'image/jpeg', quality);
+          };
+          img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+          img.src = url;
+        });
+      }
+
       async function generateVocabFromImage(file, deckId) {
         _imageVocabDeckId = deckId;
         const btn = document.querySelector('.generate-btn');
@@ -9484,11 +9547,15 @@ Return only raw JSON with no markdown code fences.`;
         if (btn) { btn.textContent = 'Scanning…'; btn.disabled = true; }
 
         try {
+          // Compress image before sending — reduces token usage by ~80%
+          const compressed = await _compressImageForAI(file);
+          const mimeType = 'image/jpeg';
+
           const base64Str = await new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result.split(',')[1]);
             reader.onerror = reject;
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(compressed);
           });
 
           const promptText = `You are an expert OCR and vocabulary assistant. Look at the provided image of a book page and return a JSON object with exactly two keys:
@@ -9503,7 +9570,7 @@ Return only raw JSON with no markdown code fences.`;
               contents: [{
                 parts: [
                   { text: promptText },
-                  { inline_data: { mime_type: file.type, data: base64Str } }
+                  { inline_data: { mime_type: mimeType, data: base64Str } }
                 ]
               }]
             })
@@ -12013,13 +12080,15 @@ No markdown, no explanation.`;
       async function _callGemini(promptText, file) {
         const parts = [{ text: promptText }];
         if (file) {
+          // Compress image before sending to reduce token usage ~80%
+          const compressed = await _compressImageForAI(file);
           const base64Str = await new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result.split(',')[1]);
             reader.onerror = reject;
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(compressed);
           });
-          parts.push({ inline_data: { mime_type: file.type, data: base64Str } });
+          parts.push({ inline_data: { mime_type: 'image/jpeg', data: base64Str } });
         }
         const res = await fetch(GEMINI_PROXY_URL, {
           method: 'POST',
