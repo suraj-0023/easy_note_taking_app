@@ -4,13 +4,13 @@
 
 ---
 
-## 2026-06-13 — Repository Restructuring for iOS & Android Capacitor Builds
+## 2026-06-13 — Repository Restructuring and Mobile UX Optimizations for iOS & Android
 
-**What:** Restructured and rearranged the codebase layout to prepare for compiling iOS and Android native applications. Moved all active application files (HTML, CSS, JS, JSON data files, folders, and documentation) from the nested `Flashcards_app_project/` folder up to the root directory. Renamed the main application file `app.html` to `index.html`. Added `capacitor.config.ts` configuration. Created a backwards-compatible redirection file at `Flashcards_app_project/app.html` to prevent breaking existing user bookmarks.
+**What:** Restructured and rearranged the codebase layout to prepare for compiling iOS and Android native applications. Moved all active application files (HTML, CSS, JS, JSON data files, folders, and documentation) from the nested `Flashcards_app_project/` folder up to the root directory. Renamed the main application file `app.html` to `index.html`. Added `capacitor.config.ts` configuration. Created a backwards-compatible redirection file at `Flashcards_app_project/app.html` to prevent breaking existing user bookmarks. Implemented 18 granular mobile UX optimizations (safe area padding adjustments, tap highlight elimination, disabling text drag-selection, touch target sizing, momentum scrolling, and GPU bottom-sheet animations).
 
-**Why:** The nested folder structure made Capacitor configuration complex, as mobile platforms expect the root entry point to be a standard `index.html` at the top level of the web assets directory. Moving everything to the root also simplifies deployment on GitHub Pages, loading the app instantly without the redirect delays of the old layout.
+**Why:** The nested folder structure made Capacitor configuration complex, as mobile platforms expect the root entry point to be a standard `index.html` at the top level of the web assets directory. Moving everything to the root also simplifies deployment on GitHub Pages, loading the app instantly. The 18 mobile UX overrides are necessary to make the web app feel like a premium, native iOS/Android application instead of a generic website.
 
-**Impact:** The codebase is now in a clean, professional, flat layout ready for native compilation. GitHub Pages serves the app directly from the root URL. Backwards compatibility is preserved so that anyone using old bookmarks will still redirect to the new layout without a 404. All 25 regression tests pass successfully under the new directory structure.
+**Impact:** The codebase is now in a clean, professional, flat layout ready for native compilation. GitHub Pages serves the app directly from the root URL. Backwards compatibility is preserved so that anyone using old bookmarks will still redirect to the new layout without a 404. Touch states are snappier, safe area bounds are respected around iPhone notches and home indicators, buttons are optimized for thumb taps, and elastic momentum scrolls are applied. All 25 regression tests pass successfully under the new directory structure.
 
 **Technical Detail:**
 1. **File Moves:** Moved `nexora-onboarding.css`, `nexora-onboarding.js`, `vocabulary.json`, `quiz_words.json`, `projects.json`, `CODE_MAP.md`, `PRD.md`, `PRD_P2.md`, `comprehensive_project_summary.md`, `design_document_P2.md`, `design_plans.html`, and `evolution.md` from `Flashcards_app_project/` to the root folder.
@@ -19,6 +19,8 @@
 4. **Redirection Fallback:** Created a dummy `Flashcards_app_project/app.html` file containing a meta-refresh and JS `window.location.replace` pointing to `../index.html`.
 5. **Configuration:** Created `capacitor.config.ts` set to use `webDir: '.'` (root folder).
 6. **Reference Updates:** Updated paths in `test_app.js`, `CLAUDE.md`, `skills/app_project_manager.md`, and `docs/github_pages_deployment.md`.
+7. **Viewport meta update:** Set `maximum-scale=1.0, user-scalable=no` on viewport tag to prevent zoom-on-tap.
+8. **StylesGlobal additions:** Appended safe-area padding rules for `body`, `-webkit-tap-highlight-color: transparent`, `@media (hover: none)` override for `.dict-card` translation, `user-select: none` for buttons/cards, `-webkit-overflow-scrolling: touch` momentum scrolls, and enlarged `<=768px` touch target targets (min 44px) for controls. Added `translate3d(0, 0, 0)` GPU layouts on bottom sheets.
 
 ---
 

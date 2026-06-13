@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Nexora — From Information to Intelligence</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
@@ -6135,6 +6135,83 @@
     .vi-inline { position: static; transform: none; flex-shrink: 0; }
     [data-theme="dark"] .vi-btn { background: var(--surface-2, #1C1A17); border-color: var(--border-2, #2A2826); }
     [data-theme="dark"] .vi-btn:hover { border-color: #5BA4FF; color: #5BA4FF; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MOBILE NATIVE UX/UI OVERRIDES (TASKS 2-18)
+    ════════════════════════════════════════════════════════════════ */
+    /* Tasks 2 & 3: Safe Area bounds for notches and bottom swipe bar */
+    body {
+      padding-top: env(safe-area-inset-top) !important;
+      padding-bottom: env(safe-area-inset-bottom) !important;
+    }
+
+    /* Task 4: Remove translucent tap highlight box on mobile Safari */
+    * {
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    /* Task 5: Disable sticky hover zoom/translate on touch devices */
+    @media (hover: none) {
+      .dict-card:hover {
+        transform: none !important;
+        box-shadow: var(--shadow-card) !important;
+      }
+    }
+
+    /* Tasks 6, 7 & 8: Prevent drag text-selection highlights on UI elements */
+    button, 
+    .new-project-btn, 
+    .project-item-sidebar,
+    .dict-card, 
+    .lib-summary-tile, 
+    .lib-list-back-btn, 
+    .practice-back-btn, 
+    .close-btn, 
+    .modal-close,
+    .skip-login-btn,
+    .sidebar-search-bar,
+    .review-item-card,
+    aside a {
+      -webkit-user-select: none !important;
+      user-select: none !important;
+    }
+
+    /* Tasks 14, 15, 16 & 17: Apply elastic iOS momentum scrolling physics */
+    main,
+    aside,
+    .modal,
+    #libraryListView,
+    #recentlyAddedSection {
+      -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* Task 18: GPU hardware-acceleration for mobile bottom sheets */
+    @media (max-width: 768px) {
+      .search-modal-panel,
+      .add-modal-panel {
+        transform: translate3d(0, 0, 0) !important;
+        will-change: transform;
+      }
+    }
+
+    /* Tasks 9, 10, 11, 12 & 13: Standard touch target sizes (min 44px) */
+    @media (max-width: 768px) {
+      .modal-close,
+      .close-btn,
+      #hamburgerBtn,
+      .vi-btn,
+      .practice-back-btn {
+        min-width: 44px !important;
+        min-height: 44px !important;
+        display: grid !important;
+        place-items: center !important;
+      }
+      #bottomNav a {
+        min-height: 48px !important;
+        display: flex !important;
+        align-items: center !important;
+      }
+    }
   </style>
 </head>
 
