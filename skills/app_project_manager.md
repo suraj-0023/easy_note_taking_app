@@ -9,7 +9,7 @@ This skill ensures that the project's development is recorded in both a chronolo
 
 ## Core Responsibilities
 
-1.  **Maintain `evolution.md`**: After every major task or iteration, update the `/Users/surajkunuku/Desktop/Flashcards_app_project/evolution.md` file with the specific changes made and their immediate rationale.
+1.  **Maintain `evolution.md`**: After every major task or iteration, update the `evolution.md` file at the root of the project with the specific changes made and their immediate rationale.
 2.  **Update `comprehensive_project_summary.md`**: Maintain a living documentation file that summarizes the project's current state, overall architecture, key features, and development history. This file should be easy to refer to for understanding how the project has developed over time.
 3.  **Document Rationale**: For every change, document:
     *   **What changed**: Technical and UI/UX modifications.

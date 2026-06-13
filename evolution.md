@@ -4,6 +4,24 @@
 
 ---
 
+## 2026-06-13 — Repository Restructuring for iOS & Android Capacitor Builds
+
+**What:** Restructured and rearranged the codebase layout to prepare for compiling iOS and Android native applications. Moved all active application files (HTML, CSS, JS, JSON data files, folders, and documentation) from the nested `Flashcards_app_project/` folder up to the root directory. Renamed the main application file `app.html` to `index.html`. Added `capacitor.config.ts` configuration. Created a backwards-compatible redirection file at `Flashcards_app_project/app.html` to prevent breaking existing user bookmarks.
+
+**Why:** The nested folder structure made Capacitor configuration complex, as mobile platforms expect the root entry point to be a standard `index.html` at the top level of the web assets directory. Moving everything to the root also simplifies deployment on GitHub Pages, loading the app instantly without the redirect delays of the old layout.
+
+**Impact:** The codebase is now in a clean, professional, flat layout ready for native compilation. GitHub Pages serves the app directly from the root URL. Backwards compatibility is preserved so that anyone using old bookmarks will still redirect to the new layout without a 404. All 25 regression tests pass successfully under the new directory structure.
+
+**Technical Detail:**
+1. **File Moves:** Moved `nexora-onboarding.css`, `nexora-onboarding.js`, `vocabulary.json`, `quiz_words.json`, `projects.json`, `CODE_MAP.md`, `PRD.md`, `PRD_P2.md`, `comprehensive_project_summary.md`, `design_document_P2.md`, `design_plans.html`, and `evolution.md` from `Flashcards_app_project/` to the root folder.
+2. **Directory Moves:** Moved `projects/`, `docs/`, and `skills/` folders to the root.
+3. **App Rename:** Renamed `Flashcards_app_project/app.html` to `index.html` at the root.
+4. **Redirection Fallback:** Created a dummy `Flashcards_app_project/app.html` file containing a meta-refresh and JS `window.location.replace` pointing to `../index.html`.
+5. **Configuration:** Created `capacitor.config.ts` set to use `webDir: '.'` (root folder).
+6. **Reference Updates:** Updated paths in `test_app.js`, `CLAUDE.md`, `skills/app_project_manager.md`, and `docs/github_pages_deployment.md`.
+
+---
+
 ## 2026-05-17 — Command-Center (Notion-style) UX redesign + 6 bug fixes
 
 **What:** Full visual redesign of the app shell from M3 warm/emerald to a Notion/Linear-inspired "Command-Center" aesthetic. Blue `#2D8CFF` replaces emerald as the primary UI accent for all chrome elements (sidebar, buttons, active states, add modal, search shortcut pill). Library section tiles become minimal board cards. A board stats bar (`#ccBoardStats`) appears above the library showing Total Items, Mastered, Due Today, and Decks counts. Sidebar gains an inline search button styled as a ghost pill. Six confirmed bugs were found and fixed by parallel Haiku bug-hunter agents.

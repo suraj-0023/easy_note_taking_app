@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
 
-const APP_PATH = 'file://' + path.resolve(__dirname, 'Flashcards_app_project/app.html');
+const APP_PATH = 'file://' + path.resolve(__dirname, 'index.html');
 
 let browser, page;
 const results = [];

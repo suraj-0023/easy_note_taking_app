@@ -1,7 +1,7 @@
 # GitHub Pages Deployment — Nexora App
 
 ## Live URL
-`https://suraj-0023.github.io/Flashcards_app/`
+`https://suraj-0023.github.io/easy_note_taking_app/`
 
 ## Architecture
 ```
@@ -11,9 +11,9 @@ User Browser
 GitHub Pages (free CDN + HTTPS)
      │
      ▼
-/index.html  →  redirects to →  Flashcards_app_project/app.html
-                                        │
-                                        └── Firebase Auth + Firestore (untouched)
+/index.html  (The main app container)
+     │
+     └── Firebase Auth + Firestore
 ```
 
 ## Cost
@@ -26,7 +26,7 @@ GitHub Pages (free CDN + HTTPS)
 ## One-Time Setup Steps
 
 ### 1. Enable GitHub Pages (do this once in browser)
-1. Go to: `https://github.com/suraj-0023/Flashcards_app/settings/pages`
+1. Go to: `https://github.com/suraj-0023/easy_note_taking_app/settings/pages`
 2. Source → **Deploy from a branch**
 3. Branch → **main** → Folder → **/ (root)**
 4. Click **Save**
@@ -57,8 +57,7 @@ Every `git push` to `main` automatically updates the live site within ~60 second
 ## Files
 | File | Purpose |
 |---|---|
-| `/index.html` | Root redirect → sends users to the actual app |
-| `Flashcards_app_project/app.html` | The main app |
+| `/index.html` | The main app |
 
 ---
 

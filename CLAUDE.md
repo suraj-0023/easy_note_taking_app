@@ -16,19 +16,19 @@ The Haiku agent handles everything: updating docs, committing, pushing, and mana
 
 ### Step 0 — Update Documentation
 
-Before committing, update these two files following the rules in `Flashcards_app_project/skills/app_project_manager.md`:
+Before committing, update these two files following the rules in `skills/app_project_manager.md`:
 
-1. **`Flashcards_app_project/evolution.md`** — Prepend a new entry at the top (reverse-chronological) with today's date covering:
+1. **`evolution.md`** — Prepend a new entry at the top (reverse-chronological) with today's date covering:
    - **What**: Technical and UI/UX changes made
    - **Why**: The problem solved or user request
    - **Impact**: Functional or aesthetic outcome
    - **Technical Detail**: Key functions, files, or data structures changed
 
-2. **`Flashcards_app_project/comprehensive_project_summary.md`** — Update any sections that are now outdated due to the changes (features list, architecture, roadmap, "Last Updated" date).
+2. **`comprehensive_project_summary.md`** — Update any sections that are now outdated due to the changes (features list, architecture, roadmap, "Last Updated" date).
 
-3. **`Flashcards_app_project/CODE_MAP.md`** — Refresh line numbers by running:
+3. **`CODE_MAP.md`** — Refresh line numbers by running:
    ```bash
-   grep -n "@@SECTION" Flashcards_app_project/app.html
+   grep -n "@@SECTION" index.html
    ```
    Compare the output against the current CODE_MAP.md table. Update any line numbers that have shifted and add rows for any new `@@SECTION` markers not yet in the table. Include this file in the same commit.
 
@@ -142,23 +142,23 @@ chore:    tooling, config, deps
 
 ## Project Overview
 
-Single-file app (`Flashcards_app_project/app.html`) backed by Firebase Auth + Firestore.  
+Single-file app (`index.html`) backed by Firebase Auth + Firestore.  
 Vocabulary sourced from `vocabulary.json` and `quiz_words.json`.  
 User data (notes, custom cards, vocab, decks) stored in namespaced localStorage and synced to Firestore.
 
-## Code Navigation (app.html)
+## Code Navigation (index.html)
 
-`app.html` is a single 10,500+ line file. Before reading or editing it:
+`index.html` is a single 10,500+ line file. Before reading or editing it:
 
-1. Check [CODE_MAP.md](Flashcards_app_project/CODE_MAP.md) for the section you need.
-2. Run `grep -n "@@SECTION: SectionName" Flashcards_app_project/app.html` to get the exact line number.
+1. Check [CODE_MAP.md](CODE_MAP.md) for the section you need.
+2. Run `grep -n "@@SECTION: SectionName" index.html` to get the exact line number.
 3. Read only that section (typically 100–300 lines) instead of the full file.
 4. If you need JS for a feature, look for the matching `JS*` section (e.g., `JSFlashcards` for flashcard study logic).
 
-**Never read the full app.html unless the task explicitly spans the entire file.**
+**Never read the full index.html unless the task explicitly spans the entire file.**
 
 ### Keeping the map up to date
-- **When adding a new section** (new UI block, new feature, new JS function group): place a `<!-- @@SECTION: Name -->` (HTML) or `// @@SECTION: Name` (JS) marker at the top of it, then add a new row to `Flashcards_app_project/CODE_MAP.md`.
+- **When adding a new section** (new UI block, new feature, new JS function group): place a `<!-- @@SECTION: Name -->` (HTML) or `// @@SECTION: Name` (JS) marker at the top of it, then add a new row to `CODE_MAP.md`.
 - **When modifying an existing section**: no marker change needed — the existing marker stays.
 - **Naming convention**: PascalCase, no spaces (e.g. `JSThemeManager`, `SettingsPanel`).
 - This ensures every new section is discoverable without reading the full file.
